@@ -3,1474 +3,1134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C Language Exam | Eng. Ahmed Eid</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-
-  <!-- Prism.js — C syntax highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
-
+  <title>Microsoft Office Quiz | 150 سؤال | Eng. Ahmed Eid</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
-:root {
-      --bg: #f8fafc; 
-      --surface: #ffffff; 
-      --card: #ffffff;
-      --border: #e2e8f0; 
-      --border-active: #4f8ef7;
-      --accent: #4f8ef7; 
-      --accent-2: #a78bfa;
-      --gold: #fbbf24; 
-      --success: #4ade80; 
-      --danger: #ef4444;
-      --text: #1e293b; 
-      --text-2: #64748b; 
-      --text-code: #0f172a;
-      --font-ui: 'Inter', sans-serif;
-      --font-arabic: 'Cairo', sans-serif;
-      --font-code: 'Fira Code', monospace;
-      --radius: 16px; 
-      --radius-sm: 10px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
-      --shadow-lg: 0 8px 48px rgba(0,0,0,0.12);
-      --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    :root {
+      --primary: #1a1a2e;
+      --primary-mid: #16213e;
+      --accent: #0078d4;
+      --success: #107c10;
+      --warning: #d83b01;
+      --gold: #ffb900;
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --text: #f0f0f0;
+      --muted: #8a8a8a;
+      --border-light: rgba(0, 120, 212, 0.2);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body { 
-      background: var(--bg); 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
       color: var(--text);
-      font-family: var(--font-arabic); 
-      min-height: 100vh;
       overflow-x: hidden;
-      position: relative;
+      scroll-behavior: smooth;
     }
 
-/* Background Texture */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: radial-gradient(circle, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-      background-size: 28px 28px;
-      opacity: 0.05;
-      z-index: -2;
-      pointer-events: none;
+    /* شاشات العرض */
+    .screen {
+      display: none;
+      min-height: 100vh;
+      animation: fadeIn 0.4s ease-out;
     }
 
-    /* Global Typography */
-    .en { font-family: var(--font-ui); direction: ltr; text-align: left; display: block; }
-    .code-font { font-family: var(--font-code); direction: ltr; text-align: left; }
-
-    /* Buttons & Inputs */
-    button {
-      font-family: var(--font-arabic);
-      cursor: pointer;
-      border: none;
-      outline: none;
-      transition: var(--transition);
-    }
-    
-    input, textarea {
-      font-family: var(--font-arabic);
-      color: var(--text);
-      transition: var(--transition);
-    }
-
-    /* Screens */
-    .screen { display: none; min-height: 100vh; padding-bottom: 60px; }
-    .screen.active { 
-      display: block;
-      animation: screenIn 0.3s ease forwards; 
-    }
-    
-    @keyframes screenIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ====== SCREEN 1: WELCOME ====== */
-    #screen1 {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      position: relative;
-    }
-    #screen1.active {
-      display: flex;
-    }
-
-    .hero-glow {
-      position: absolute;
-      top: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 100%; height: 600px;
-      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(79,142,247,0.07), transparent);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .floating-tokens {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      overflow: hidden;
-      z-index: -1;
-      pointer-events: none;
-    }
-    .bg-token {
-      position: absolute;
-      font-family: var(--font-code);
-      color: var(--text-code);
-      opacity: 0.04;
-      white-space: nowrap;
-      animation: floatUp linear infinite;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) rotate(0deg); }
-      100% { transform: translateY(-20vh) rotate(10deg); }
-    }
-
-    .hero-elements > * {
-      opacity: 0;
-      animation: slideUpFade 0.6s ease forwards;
-    }
-    .hero-elements > :nth-child(1) { animation-delay: 0.1s; }
-    .hero-elements > :nth-child(2) { animation-delay: 0.2s; }
-    .hero-elements > :nth-child(3) { animation-delay: 0.3s; }
-    .hero-elements > :nth-child(4) { animation-delay: 0.4s; }
-    .hero-elements > :nth-child(5) { animation-delay: 0.5s; }
-
-    @keyframes slideUpFade {
-      from { opacity: 0; transform: translateY(24px); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .brand-badge {
-      display: inline-block;
-      background: rgba(79,142,247,0.1);
-      border: 1px solid rgba(79,142,247,0.25);
-      border-radius: 999px;
+    /* ================= SCREEN 1: WELCOME ================= */
+    #screen1 {
+      position: relative;
+      background: linear-gradient(135deg, var(--bg), var(--primary));
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .bg-shapes {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 120, 212, 0.1);
+      animation: float 15s infinite linear;
+    }
+
+    .shape.word { width: 60px; height: 60px; border-radius: 12px; top: 20%; left: 15%; background: rgba(43, 87, 154, 0.1); }
+    .shape.excel { width: 50px; height: 50px; border-radius: 50%; top: 60%; left: 80%; background: rgba(33, 115, 70, 0.1); animation-duration: 20s; }
+    .shape.ppt { width: 70px; height: 70px; border-radius: 8px; top: 75%; left: 20%; background: rgba(183, 71, 42, 0.1); animation-duration: 18s; transform: rotate(45deg); }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-100px) rotate(180deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+
+    .welcome-container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .logo-container {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(0, 120, 212, 0.5);
+    }
+
+    .welcome-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .welcome-subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+
+    .stat-badge {
+      background: rgba(0, 120, 212, 0.1);
+      border: 1px solid var(--border-light);
       padding: 6px 16px;
+      border-radius: 20px;
       font-size: 0.9rem;
       color: var(--accent);
-      margin-bottom: 24px;
+      font-family: 'Fira Code', monospace;
     }
-
-    .hero-icon {
-      font-family: var(--font-code);
-      font-size: 3rem;
-      color: var(--accent-2);
-      margin-bottom: 16px;
-      animation: gentleFloat 3s ease-in-out infinite;
-    }
-    @keyframes gentleFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .exam-title {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-    .exam-subtitle {
-      font-size: 1.2rem;
-      color: var(--text-2);
-      margin-bottom: 24px;
-      overflow: hidden;
-      white-space: nowrap;
-      margin: 0 auto 24px auto;
-      border-right: 2px solid var(--accent);
-      animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
-      max-width: fit-content;
-      padding-right: 5px;
-    }
-    @keyframes typing { from { max-width: 0 } to { max-width: 100% } }
-    @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--accent); } }
-
-    .divider {
-      height: 2px; width: 100%; max-width: 300px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      margin: 24px auto;
-    }
-
-    .exam-stats {
-      color: var(--text-2);
-      font-size: 1rem;
-      margin-bottom: 40px;
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-    }
-    .exam-stats span { color: var(--accent); font-family: var(--font-ui); font-weight: 600; }
 
     .name-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-      box-shadow: var(--shadow);
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto;
+      background: rgba(26, 26, 46, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-light);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
     }
+
     .name-card label {
       display: block;
-      margin-bottom: 16px;
-      color: var(--text);
+      margin-bottom: 15px;
       font-weight: 600;
+      color: var(--text);
     }
+
     .name-card input {
       width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 14px 16px;
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      margin-bottom: 16px;
+      background: rgba(15, 15, 26, 0.8);
+      border: 2px solid var(--primary-mid);
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      outline: none;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+      text-align: center;
     }
+
     .name-card input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(79,142,247,0.18);
+      box-shadow: 0 0 15px rgba(0, 120, 212, 0.3);
     }
-    .name-card button {
-      width: 100%;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: white;
-      padding: 14px;
-      border-radius: var(--radius-sm);
-      font-size: 1.1rem;
-      font-weight: 700;
+
+    .name-card input.error {
+      border-color: var(--warning);
+      box-shadow: 0 0 15px rgba(216, 59, 1, 0.3);
+      animation: shake 0.4s ease-in-out;
     }
-    .name-card button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(79,142,247,0.4);
-    }
-    .error-msg {
-      color: var(--danger);
-      margin-top: 12px;
-      font-size: 0.9rem;
-      display: none;
-    }
-    .shake { animation: shake 0.4s ease-in-out; }
+
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-5px); }
       75% { transform: translateX(5px); }
     }
 
-    /* ====== SCREEN 2: EXAM ====== */
-    .top-bar {
-      position: sticky; top: 0;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      z-index: 100;
+    .start-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
-    .top-bar-content {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 16px 20px;
+
+    .start-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    .start-btn:hover {
+      background: #0086f0;
+      box-shadow: 0 0 20px rgba(0, 120, 212, 0.4);
+    }
+
+    /* ================= SCREEN 2: EXAM ================= */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-light);
+      z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 15px 30px;
     }
-    .tb-brand { font-size: 0.9rem; color: var(--text-2); }
-    .tb-progress { font-family: var(--font-ui); color: var(--accent); font-weight: 600; }
-    .progress-bar-container { height: 3px; width: 100%; background: var(--surface); }
-    .progress-bar-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+
+    .top-bar-title {
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .top-bar-stats {
+      font-family: 'Fira Code', 'Cairo', monospace;
+      font-weight: 700;
+      background: var(--primary-mid);
+      padding: 6px 20px;
+      border-radius: 20px;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .header-submit-btn {
+      background: transparent;
+      color: var(--warning);
+      border: 1px solid var(--warning);
+      padding: 6px 15px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .header-submit-btn:hover {
+      background: var(--warning);
+      color: #fff;
+    }
+
+    .progress-container {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%; height: 4px;
+      background: var(--primary-mid);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
       transition: width 0.3s ease;
     }
 
-    .questions-container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
+    .exam-layout {
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Category Headers */
+    .category-header {
+      background: linear-gradient(135deg, var(--primary-mid), var(--card));
+      color: var(--accent);
+      font-size: 1.5rem;
+      font-weight: 900;
+      padding: 15px 25px;
+      border-radius: 12px;
+      margin: 50px 0 25px 0;
+      border: 2px solid var(--border-light);
+      text-align: right;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      direction: rtl;
+    }
+
+    .category-header:first-child { margin-top: 0; }
+
+    .questions-wrapper {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 30px;
     }
 
-    .q-card {
+    .question-card {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 28px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: border-color 0.3s ease;
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .q-card.slide-up {
-      opacity: 1; transform: translateY(0);
-      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease;
-    }
-    .q-card.answered {
-      border-color: rgba(79,142,247,0.4);
-    }
+
+    .question-card:hover { border-color: rgba(0, 120, 212, 0.4); }
 
     .q-header {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--primary-mid);
+      padding-bottom: 15px;
     }
+
     .q-num {
-      font-family: var(--font-ui); color: var(--accent); font-weight: 700; font-size: 1.2rem;
-    }
-    .q-type-pill {
-      background: rgba(167,139,250,0.15); color: var(--accent-2);
-      padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; font-family: var(--font-ui); font-weight: 600;
-    }
-
-    .q-text { font-size: 1.2rem; margin-bottom: 20px; line-height: 1.6; }
-
-    /* =========================================
-       ULTIMATE FIX FOR CODE BLOCKS & LTR
-       ========================================= */
-    .code-wrapper {
-      direction: ltr !important;
-      text-align: left !important;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-top: 12px;
-      width: 100%;
-    }
-
-    /* Force Prism to respect LTR and custom background */
-    pre[class*="language-"], code[class*="language-"] {
-      direction: ltr !important;
-      text-align: left !important;
-      background: #f8f9fa !important;
-      text-shadow: none !important;
-      font-family: var(--font-code), monospace !important;
-      margin: 0 !important;
-      border-radius: var(--radius-sm) !important;
-      color: #0f172a !important;
-    }
-    
-    pre[class*="language-"] {
-      border-left: 3px solid var(--accent) !important;
-      padding: 16px !important;
-    }
-
-    /* Inputs inside code wrappers */
-    .ans-input, .ans-textarea {
-      width: 100%;
-      background: #f8f9fa !important;
-      border: 1px solid var(--border);
-      color: #0f172a;
-      padding: 16px;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-code), monospace !important;
-      direction: ltr !important;
-      text-align: left !important;
-      unicode-bidi: plaintext !important; /* Best for cursor fix */
+      font-family: 'Fira Code', monospace;
+      color: var(--accent);
+      font-weight: 600;
+      background: rgba(0, 120, 212, 0.1);
+      padding: 6px 15px;
+      border-radius: 8px;
       font-size: 1rem;
-      margin-top: 16px;
-      transition: var(--transition);
-    }
-    
-    .ans-input:focus, .ans-textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(79,142,247,0.18);
-      outline: none;
-    }
-    
-    .ans-input::placeholder, .ans-textarea::placeholder {
-      color: var(--text-2);
-      opacity: 0.7;
     }
 
-    /* MCQ Styles */
-    .mcq-grid { display: flex; flex-direction: column; gap: 12px; }
+    .q-type { font-size: 1.5rem; }
+
+    .q-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      color: #fff;
+      direction: ltr; /* Questions are in English */
+      text-align: left;
+    }
+
+    .mcq-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      direction: ltr; /* Options in English */
+    }
+
     .mcq-option {
-      display: flex; align-items: center; gap: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      padding: 16px; border-radius: var(--radius-sm);
-      cursor: pointer; transition: 0.2s;
-      direction: ltr; /* Force left-to-right alignment for code options */
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--primary-mid);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
     }
-    .mcq-option:hover { border-color: var(--text-2); }
+
+    .mcq-option:hover {
+      background: rgba(0, 120, 212, 0.1);
+      border-color: rgba(0, 120, 212, 0.3);
+    }
+
     .mcq-option.selected {
+      background: rgba(0, 120, 212, 0.15);
       border-color: var(--accent);
-      background: rgba(79,142,247,0.08);
+      box-shadow: 0 0 15px rgba(0, 120, 212, 0.2);
+      transform: scale(1.01);
     }
+
     .opt-letter {
-      font-family: var(--font-ui); font-weight: 600; color: var(--text-2);
-      background: var(--bg); width: 28px; height: 28px; border-radius: 4px;
+      width: 32px; height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: var(--muted);
+      margin-right: 15px; flex-shrink: 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem;
     }
-    .mcq-option.selected .opt-letter { background: var(--accent); color: white; }
-    .opt-text { flex: 1; direction: ltr; text-align: left; font-family: var(--font-code); }
-    .opt-check { color: var(--accent); opacity: 0; font-weight: bold; }
-    .mcq-option.selected .opt-check { opacity: 1; }
 
-    /* T/F Styles */
-    .tf-grid { display: flex; gap: 16px; }
-    .tf-btn {
-      flex: 1; background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); padding: 16px; border-radius: var(--radius-sm);
-      font-size: 1.1rem; font-weight: 600;
+    .mcq-option.selected .opt-letter {
+      background: var(--accent);
+      color: #fff;
     }
-    .tf-btn:hover { border-color: var(--text-2); }
-    .tf-btn.selected.true { background: rgba(74,222,128,0.15); border-color: var(--success); color: var(--success); }
-    .tf-btn.selected.false { background: rgba(248,113,113,0.15); border-color: var(--danger); color: var(--danger); }
 
-    .submit-btn {
-      display: block; width: 100%; max-width: 400px; margin: 40px auto;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: white; padding: 18px; border-radius: var(--radius);
-      font-size: 1.2rem; font-weight: 700; box-shadow: var(--shadow);
+    .opt-text {
+      flex: 1;
+      font-size: 1.05rem;
+      font-weight: 600;
     }
-    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,142,247,0.4); }
+
+    .opt-check {
+      opacity: 0;
+      color: var(--accent);
+      font-weight: 900;
+      transform: scale(0.5);
+      transition: all 0.2s ease;
+      font-size: 1.2rem;
+    }
+
+    .mcq-option.selected .opt-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .submit-container {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 2px dashed var(--primary-mid);
+      text-align: center;
+    }
+
+    .submit-btn-large {
+      background: var(--warning);
+      color: #fff;
+      border: none;
+      padding: 18px 50px;
+      border-radius: 12px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      max-width: 600px;
+      transition: 0.3s;
+      animation: pulseWarning 2s infinite;
+      box-shadow: 0 10px 20px rgba(216, 59, 1, 0.2);
+    }
+
+    @keyframes pulseWarning {
+      0% { box-shadow: 0 0 0 0 rgba(216, 59, 1, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(216, 59, 1, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(216, 59, 1, 0); }
+    }
+
+    .submit-btn-large:hover {
+      background: #e64a19;
+      transform: translateY(-3px);
+    }
 
     /* Modal */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(15,17,23,0.85); backdrop-filter: blur(4px);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 15, 26, 0.8); backdrop-filter: blur(5px);
+      display: none; justify-content: center; align-items: center; z-index: 1000;
     }
-    .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+    .modal-overlay.active { display: flex; }
+
     .modal-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 32px; width: 90%; max-width: 400px;
-      text-align: center; transform: scale(0.9); transition: 0.3s;
+      background: var(--card); border: 1px solid var(--border-light);
+      padding: 30px; border-radius: 16px; text-align: center;
+      max-width: 400px; width: 90%;
+      transform: translateY(-50px); animation: modalEnter 0.3s forwards;
     }
-    .modal-overlay.active .modal-card { transform: scale(1); }
-    .modal-title { font-size: 1.5rem; margin-bottom: 12px; }
-    .modal-desc { color: var(--text-2); margin-bottom: 24px; }
-    .modal-actions { display: flex; gap: 12px; }
-    .modal-btn { flex: 1; padding: 12px; border-radius: var(--radius-sm); font-weight: 600; }
-    .btn-cancel { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-    .btn-confirm { background: var(--accent); color: white; }
 
-    /* ====== SCREEN 3: RESULTS ====== */
-    #screen3 { padding-top: 60px; }
-    .results-container { max-width: 700px; margin: 0 auto; padding: 0 20px; }
-    
-    .score-wrapper { position: relative; width: 200px; height: 200px; margin: 0 auto 30px; }
+    @keyframes modalEnter { to { transform: translateY(0); } }
+
+    .modal-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 15px; }
+    .modal-text { color: var(--muted); margin-bottom: 25px; line-height: 1.6; }
+    .modal-stats { font-family: 'Fira Code', monospace; font-size: 1.1rem; color: var(--accent); margin-bottom: 25px; }
+
+    .modal-actions { display: flex; gap: 15px; justify-content: center; }
+    .modal-btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+    .btn-confirm { background: var(--success); color: #fff; }
+    .btn-confirm:hover { background: #0e680e; box-shadow: 0 0 15px rgba(16, 124, 16, 0.4); }
+    .btn-cancel { background: var(--primary-mid); color: var(--text); }
+    .btn-cancel:hover { background: #22325c; }
+
+    /* ================= SCREEN 3: RESULTS ================= */
+    #screen3 {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .results-header { text-align: center; margin-bottom: 40px; }
+
+    .score-circle-container {
+      position: relative; width: 200px; height: 200px; margin: 0 auto 20px;
+    }
+
     .score-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-    .score-bg { fill: none; stroke: var(--surface); stroke-width: 12; }
-    .score-ring { 
-      fill: none; stroke: var(--success); stroke-width: 12; 
-      stroke-dasharray: 502; stroke-dashoffset: 502; stroke-linecap: round;
-      transition: stroke-dashoffset 1.5s ease-out, stroke 0.5s ease;
+    .score-bg { fill: none; stroke: var(--primary-mid); stroke-width: 12; }
+    .score-progress {
+      fill: none; stroke: var(--accent); stroke-width: 12;
+      stroke-linecap: round; stroke-dasharray: 565.48; stroke-dashoffset: 565.48;
+      transition: stroke-dashoffset 2s ease-out, stroke 0.5s ease;
     }
-    .score-text-center {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    .score-num { font-size: 3rem; font-family: var(--font-ui); font-weight: 700; color: var(--text); }
-    .score-label { font-size: 1rem; color: var(--text-2); }
 
-    .badge-perf { text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 30px; }
-    
-    .stats-row {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px;
+    .score-text {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .score-perc { font-size: 2.5rem; font-weight: 900; font-family: 'Fira Code', monospace; color: #fff; }
+    .score-label { font-size: 0.9rem; color: var(--muted); }
+
+    .badge-text { font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px;
     }
     .stat-box {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 16px; text-align: center;
+      background: var(--card); border: 1px solid var(--border-light);
+      padding: 15px; border-radius: 12px; text-align: center;
     }
-    .stat-val { font-size: 1.8rem; font-family: var(--font-ui); font-weight: 700; margin-bottom: 4px; }
-    .stat-lbl { font-size: 0.85rem; color: var(--text-2); }
-    .c-ans { color: var(--accent); } .c-cor { color: var(--success); } 
-    .c-wro { color: var(--danger); } .c-skp { color: var(--text-2); }
+    .stat-box .s-val { font-size: 1.5rem; font-weight: 700; font-family: 'Fira Code', monospace; margin-bottom: 5px; }
+    .stat-box .s-lbl { font-size: 0.85rem; color: var(--muted); }
+    
+    .c-blue { color: var(--accent); }
+    .c-green { color: var(--success); }
+    .c-red { color: var(--warning); }
+    .c-gray { color: var(--muted); }
 
-    /* Answer Review Section */
-    .review-section { margin: 40px 0; width: 100%; }
-    .review-toggle-btn {
-      width: 100%; background: var(--card); border: 1px solid var(--border);
-      color: var(--text); padding: 18px 24px; border-radius: var(--radius-sm);
-      font-size: 1.1rem; font-weight: 700; display: flex; justify-content: space-between;
-      align-items: center; transition: var(--transition);
+    /* Personal Message */
+    .personal-message-card {
+      background: rgba(26, 26, 46, 0.6); backdrop-filter: blur(10px);
+      border: 1px solid var(--border-light); border-radius: 20px;
+      padding: 30px; margin-bottom: 50px; position: relative;
+      box-shadow: 0 10px 30px rgba(0, 120, 212, 0.1);
+      animation: slideUpFade 0.6s ease-out;
     }
-    .review-toggle-btn:hover { border-color: var(--accent); background: rgba(79,142,247,0.05); }
-    .review-content {
-      display: none; flex-direction: column; gap: 16px; margin-top: 20px;
-    }
-    .review-content.open { display: flex; animation: slideUpFade 0.4s ease forwards; }
-    
-    .rev-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 20px;
-      text-align: right;
-    }
-    .rev-card.correct { border-right: 4px solid var(--success); }
-    .rev-card.wrong { border-right: 4px solid var(--danger); }
-    .rev-card.manual { border-right: 4px solid var(--accent); }
-    .rev-card.skipped { border-right: 4px solid var(--text-2); }
-    
-    .rev-header { display: flex; justify-content: space-between; margin-bottom: 16px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; align-items: center; }
-    .rev-status { font-family: var(--font-arabic); font-size: 1rem; }
-    .rev-num { font-family: var(--font-ui); color: var(--accent); font-weight: bold; }
-    .rev-q { margin-bottom: 16px; font-size: 1.1rem; line-height: 1.6; }
-    
-    .rev-answers { margin-top: 16px; background: #0a0d14; border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--border); }
-    .rev-uans { color: var(--text); margin-bottom: 8px; font-size: 1rem; }
-    .rev-uans.err { color: var(--danger); }
-    .rev-uans.corr { color: var(--success); }
-    .rev-cans { color: var(--success); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 1rem; }
-    .rev-uans b, .rev-cans b { color: var(--text-2); font-size: 0.9rem; margin-left: 8px; display: inline-block; width: 120px; }
 
-    /* Ahmed Eid Message Card */
-    .ahmed-message-card {
-      background: linear-gradient(135deg, var(--surface), var(--card));
-      border: 1px solid rgba(167,139,250,0.25);
-      border-radius: var(--radius);
-      padding: 36px;
-      margin-top: 40px;
-      position: relative;
-      opacity: 0; transform: translateY(30px);
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .ahmed-message-card.show {
-      animation: msgFadeIn 0.8s ease forwards;
-    }
-    @keyframes msgFadeIn { to { opacity: 1; transform: translateY(0); } }
 
     .msg-quote-mark {
-      position: absolute; top: 10px; right: 20px;
-      font-size: 5rem; font-family: serif; color: var(--gold); opacity: 0.3;
-      line-height: 1;
-    }
-    .msg-greeting { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; color: var(--accent-2); }
-    .msg-body p { margin-bottom: 16px; line-height: 1.8; font-size: 1.05rem; }
-    
-    .msg-quran {
-      border-right: 3px solid var(--gold);
-      background: rgba(251,191,36,0.05);
-      border-radius: var(--radius-sm);
-      padding: 16px 20px;
-      color: var(--gold);
-      font-style: italic;
-      margin: 24px 0;
-      font-weight: 600;
-      line-height: 1.8;
-    }
-    
-    .msg-points { margin: 24px 0; }
-    .msg-point {
-      display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px;
-      line-height: 1.6;
-    }
-    .mp-icon { color: var(--accent); font-weight: bold; }
-    
-    .msg-closing { font-weight: 600; color: var(--accent); margin-top: 24px; }
-    
-    .msg-signature {
-      margin-top: 32px; padding-top: 16px;
-      border-top: 1px solid rgba(167,139,250,0.2);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .msg-signature span { font-family: var(--font-ui); color: var(--text-2); font-weight: 600; }
-
-    #confetti-canvas {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 999;
+      position: absolute; top: -15px; right: 20px;
+      font-size: 4rem; color: rgba(0, 120, 212, 0.2); font-family: serif; line-height: 1;
     }
 
-    /* Footer signature */
-    .global-footer {
-      text-align: center; padding: 20px; color: var(--text-2); font-size: 0.9rem;
-      font-family: var(--font-ui); opacity: 0.7; margin-top: 40px;
+    .msg-greeting { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 15px; }
+    .student-name-inline { color: var(--accent); }
+    .msg-body p { color: #d0d0d0; line-height: 1.7; margin-bottom: 20px; font-size: 1.05rem; }
+    
+    .msg-points { display: flex; flex-direction: column; gap: 15px; }
+    .msg-point { background: var(--primary-mid); padding: 15px; border-radius: 12px; border-right: 3px solid var(--accent); }
+    .mp-label { font-weight: 700; color: #fff; display: block; margin-bottom: 5px; font-size: 0.95rem; }
+    .msg-point p { margin: 0; font-size: 0.95rem; color: var(--muted); }
+    
+    .msg-signature { text-align: left; margin-top: 20px; font-weight: 600; color: var(--text); }
+
+    /* Review Section */
+    .review-section {
+      background: var(--card); border: 1px solid var(--border-light);
+      border-radius: 16px; padding: 25px;
+    }
+    
+    .review-section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 20px; color: #fff; border-bottom: 1px solid var(--primary-mid); padding-bottom: 15px; }
+
+    .review-list { display: flex; flex-direction: column; gap: 15px; }
+
+    .review-card {
+      background: var(--primary-mid); border: 1px solid transparent;
+      border-radius: 12px; padding: 20px;
+      direction: ltr;
+      text-align: left;
     }
 
-    /* Print Optimization */
-    @media print {
-      body { 
-        font-family: var(--font-arabic);
-        line-height: 1.4;
-        color: #000;
-        background: white !important;
-      }
-      
-      /* Hide non-question content */
-      .top-bar, .submit-btn, .hero-glow, .floating-tokens,
-      #screen1, #screen3, .modal-overlay, .global-footer,
-      .hero-elements > *:not(.name-card), /* Keep name for header */
-      button, input:not(.ans-input):not(.ans-textarea) {
-        display: none !important;
-      }
-      
-      /* Compact questions */
-      .questions-container {
-        max-width: none;
-        margin: 0;
-        padding: 0;
-        gap: 12px;
-      }
-      
-      .q-card {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        border: 1px solid #ccc;
-        padding: 12px !important;
-        margin: 8px 0;
-        box-shadow: none;
-        opacity: 1 !important;
-        transform: none !important;
-        font-size: 0.95rem;
-      }
-      
-      .q-header {
-        font-size: 1rem;
-        margin-bottom: 8px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 6px;
-      }
-      
-      .q-num { font-size: 1rem; }
-      .q-type-pill { font-size: 0.75rem; padding: 2px 6px; }
-      
-      .q-text { 
-        margin-bottom: 12px !important;
-        font-size: 0.95rem;
-        line-height: 1.4;
-      }
-      
-      /* Code blocks for print */
-      .code-wrapper {
-        border: 1px solid #ddd !important;
-        padding: 8px !important;
-        margin: 8px 0 !important;
-        background: #f8f9fa !important;
-        page-break-inside: avoid;
-      }
-      
-      pre[class*="language-"] {
-        padding: 8px !important;
-        border-left: 3px solid #4f8ef7 !important;
-        font-size: 0.85rem !important;
-        line-height: 1.3;
-      }
-      
-      .ans-input, .ans-textarea {
-        border: 1px solid #ccc !important;
-        background: white !important;
-        color: #000 !important;
-        font-size: 0.9rem;
-        height: auto !important;
-        min-height: 40px;
-      }
-      
-      /* MCQ compact */
-      .mcq-grid { gap: 6px; }
-      .mcq-option {
-        padding: 8px !important;
-        font-size: 0.9rem;
-        border: 1px solid #eee;
-      }
-      
-      /* TF compact */
-      .tf-grid { gap: 8px; }
-      .tf-btn {
-        padding: 8px !important;
-        font-size: 0.95rem;
-      }
-      
-      /* Page setup */
-      @page {
-        margin: 1.5cm;
-        size: A4;
-      }
-      
-      /* Force RTL but LTR code */
-      .en, pre, code, .ans-input, .ans-textarea,
-      .opt-text, .mcq-option { direction: ltr !important; text-align: left !important; }
-      
-      /* Review section for print (if shown) */
-      #screen3 .review-section { 
-        display: block !important; 
-        margin-top: 40px;
-        break-before: page;
-      }
-      
-      .review-toggle-btn { display: none; }
-      .review-content { display: flex !important; gap: 12px; }
-      
-      /* Ahmed message - optional print */
-      .ahmed-message-card { 
-        page-break-before: always;
-        margin-top: 40px;
-        font-size: 0.95rem;
-      }
+    .review-card[data-status="correct"] { background: rgba(16, 124, 16, 0.05); border-color: rgba(16, 124, 16, 0.3); }
+    .review-card[data-status="wrong"] { background: rgba(216, 59, 1, 0.05); border-color: rgba(216, 59, 1, 0.3); }
+    .review-card[data-status="skipped"] { background: rgba(138, 138, 138, 0.05); border-color: rgba(138, 138, 138, 0.3); }
+
+    .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-direction: row-reverse; }
+    .review-card .q-num { background: transparent; padding: 0; color: var(--text); opacity: 0.8; }
+    
+    .status-badge { font-size: 0.85rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; direction: rtl;}
+    .review-card[data-status="correct"] .status-badge { background: rgba(16, 124, 16, 0.2); color: #4cc14c; }
+    .review-card[data-status="wrong"] .status-badge { background: rgba(216, 59, 1, 0.2); color: #ff7543; }
+    .review-card[data-status="skipped"] .status-badge { background: rgba(138, 138, 138, 0.2); color: #b0b0b0; }
+
+    .review-question { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #fff; }
+    
+    .review-answers { display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; }
+    .correct-answer { color: #4cc14c; }
+    .user-answer { color: var(--text); opacity: 0.9; }
+
+    .footer { text-align: center; padding: 30px; color: var(--muted); font-size: 0.85rem; margin-top: 20px; border-top: 1px solid var(--primary-mid); direction: rtl; }
+    .footer strong { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .top-bar-title span { display: none; }
+      .header-submit-btn { padding: 6px 10px; font-size: 0.9rem; }
+      .category-header { font-size: 1.3rem; padding: 15px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating bg tokens -->
-  <div class="floating-tokens" id="tokensContainer"></div>
-
-  <canvas id="confetti-canvas"></canvas>
-
-  <!-- ====== SCREEN 1: WELCOME ====== -->
-  <div id="screen1" class="screen active">
-    <div class="hero-glow"></div>
-    <div class="hero-elements">
-      <div class="brand-badge">Eng. Ahmed Eid | أحمد عيد</div>
-      <div class="hero-icon">&lt;/&gt;</div>
-      <h1 class="exam-title">C Language Exam</h1>
-      <div class="exam-subtitle">استعد، ركز، وأثبت إنك قادر ✨</div>
-      <div class="divider"></div>
-      <div class="exam-stats">
-        <div dir="rtl"><span>105</span> سؤال</div>
-        <div dir="rtl"><span>120</span> دقيقة</div>
-        <div dir="ltr"><span>C</span> Language</div>
+  <!-- ================= SCREEN 1: صفحة الدخول ================= -->
+  <div id="screen1" class="screen" style="display: flex;">
+    <div class="bg-shapes">
+      <div class="shape word"></div>
+      <div class="shape excel"></div>
+      <div class="shape ppt"></div>
+    </div>
+    
+    <div class="welcome-container">
+      <div class="logo-container">📊</div>
+      <h1 class="welcome-title">امتحان Microsoft Office الشامل</h1>
+      <p class="welcome-subtitle">اختبر معرفتك في عالم Office 📊 وانطلق نحو الاحترافية.</p>
+      
+      <div class="stats-row">
+        <span class="stat-badge">150 سؤال</span>
+        <span class="stat-badge">وقت مفتوح</span>
+        <span class="stat-badge">MCQ</span>
       </div>
+
       <div class="name-card">
-        <label>اكتب اسمك عشان يبقى الامتحان باسمك 🤍</label>
-        <input type="text" id="studentName" placeholder="اسمك هنا..." autocomplete="off" maxlength="40" />
-        <button onclick="startExam()">ابدأ الامتحان ←</button>
-        <p class="error-msg" id="nameError">اكتب اسمك الأول أولًا 😊</p>
+        <label>اكتب اسمك الأول عشان يبقى الامتحان باسمك 🤍</label>
+        <input type="text" id="studentName" placeholder="اسمك هنا..." autocomplete="off" maxlength="40">
+        <button class="start-btn" onclick="startExam()">🚀 ابدأ الامتحان</button>
       </div>
     </div>
   </div>
 
-  <!-- ====== SCREEN 2: THE EXAM ====== -->
+  <!-- ================= SCREEN 2: صفحة الأسئلة المعزولة (قائمة التمرير) ================= -->
   <div id="screen2" class="screen">
     <div class="top-bar">
-      <div class="top-bar-content">
-        <div class="tb-brand">Eng. Ahmed Eid</div>
-        <div class="tb-progress" dir="ltr"><span id="ans-count">0</span> / 105 answered</div>
-      </div>
-      <div class="progress-bar-container">
-        <div class="progress-bar-fill" id="progress-fill"></div>
+      <div class="top-bar-title">📊 <span>Office Quiz</span></div>
+      <div class="top-bar-stats" id="answeredCount">مجاب: 0 / 150</div>
+      <button class="header-submit-btn" onclick="requestSubmit()">📥 إنهاء وتسليم</button>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
       </div>
     </div>
 
-    <div class="questions-container" id="questions-container">
-      <!-- Generated via JS -->
+    <div class="exam-layout">
+      <div class="questions-wrapper" id="questionContainer">
+        <!-- يتم عرض الـ 135 سؤال هنا مقسمين إلى فئات عن طريق الجافاسكريبت -->
+      </div>
     </div>
-
-    <button class="submit-btn" onclick="openSubmitModal()">إنهاء الامتحان ←</button>
   </div>
 
-  <!-- Submit Modal -->
-  <div class="modal-overlay" id="submitModal">
+  <!-- Modal for Confirmation -->
+  <div class="modal-overlay" id="confirmModal">
     <div class="modal-card">
-      <h3 class="modal-title">متأكد إنك خلصت؟</h3>
-      <p class="modal-desc" id="modal-desc-text">راجعت إجاباتك كويس؟</p>
+      <h3 class="modal-title">هل أنت متأكد من التسليم؟</h3>
+      <p class="modal-text">راجع إحصائيات إجاباتك قبل إنهاء الامتحان.</p>
+      <div class="modal-stats" id="modalStats">مجاب: 0 | متبقي: 150</div>
       <div class="modal-actions">
-        <button class="modal-btn btn-cancel" onclick="closeSubmitModal()">رجوع للمراجعة</button>
-        <button class="modal-btn btn-confirm" onclick="submitExam()">تأكيد الإنهاء</button>
+        <button class="modal-btn btn-confirm" onclick="submitExam()">تأكيد ✓</button>
+        <button class="modal-btn btn-cancel" onclick="closeModal()">تراجع واستكمال</button>
       </div>
     </div>
   </div>
 
-  <!-- ====== SCREEN 3: RESULTS ====== -->
+  <!-- ================= SCREEN 3: صفحة النتيجة المعزولة ================= -->
   <div id="screen3" class="screen">
-    <div class="results-container">
-      <div class="score-wrapper">
-        <svg class="score-svg" viewBox="0 0 180 180">
-          <circle class="score-bg" cx="90" cy="90" r="80"></circle>
-          <circle class="score-ring" id="score-ring" cx="90" cy="90" r="80"></circle>
+    <div class="results-header">
+      <div class="score-circle-container">
+        <svg class="score-svg" viewBox="0 0 200 200">
+          <circle class="score-bg" cx="100" cy="100" r="90"></circle>
+          <circle class="score-progress" id="scoreProgressCircle" cx="100" cy="100" r="90"></circle>
         </svg>
-        <div class="score-text-center">
-          <div class="score-num"><span id="score-val">0</span>%</div>
-          <div class="score-label" id="score-lbl" dir="ltr">0 / 0</div>
+        <div class="score-text">
+          <div class="score-perc" id="scorePerc">0%</div>
+          <div class="score-label" id="scoreFraction">0 / 150</div>
         </div>
       </div>
+      <div class="badge-text" id="badgeText">جاري الحساب...</div>
+    </div>
 
-      <div class="badge-perf" id="perf-badge"></div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="s-val c-blue" id="statAnswered">0</div><div class="s-lbl">مجاب</div></div>
+      <div class="stat-box"><div class="s-val c-green" id="statCorrect">0</div><div class="s-lbl">صح</div></div>
+      <div class="stat-box"><div class="s-val c-red" id="statWrong">0</div><div class="s-lbl">خطأ</div></div>
+      <div class="stat-box"><div class="s-val c-gray" id="statSkipped">0</div><div class="s-lbl">متروك</div></div>
+    </div>
 
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-val c-ans" id="st-ans">0</div><div class="stat-lbl">أجبت</div></div>
-        <div class="stat-box"><div class="stat-val c-cor" id="st-cor">0</div><div class="stat-lbl">صح</div></div>
-        <div class="stat-box"><div class="stat-val c-wro" id="st-wro">0</div><div class="stat-lbl">خطأ</div></div>
-        <div class="stat-box"><div class="stat-val c-skp" id="st-skp">0</div><div class="stat-lbl">تركت</div></div>
-      </div>
-
-      <div style="text-align: center; color: var(--text-2); font-size: 0.95rem; margin-top: -24px; margin-bottom: 30px; font-weight: 600;">
-        * النسبة والإحصائيات أعلاه لا تشمل أسئلة "كتابة الكود" (تحتاج تصحيح المدرس).
-      </div>
-
-      <!-- Answer Review Section -->
-      <div class="review-section">
-        <button class="review-toggle-btn" onclick="toggleReview()">
-          <span>▼ مراجعة إجاباتك</span>
-          <span id="rev-icon" style="font-family: var(--font-ui); font-size: 1.5rem; line-height: 1;">+</span>
-        </button>
-        <div class="review-content" id="review-content">
-          <!-- Generated via JS -->
-        </div>
-      </div>
-
-      <!-- Ahmed Eid Exact Message -->
-      <div class="ahmed-message-card" id="msg-card">
-        <div class="msg-quote-mark">"</div>
-        <div class="msg-greeting">
-          ازيك يا صديقي/صديقتي
-          <span class="student-name-inline" id="msg-student-name" style="color: var(--text);"></span> 😊
-        </div>
-        <div class="msg-body">
-          <p>أنا أحمد… عامل/عاملة إيه؟</p>
-          <p>كنت حابب أقولك حاجة يمكن تيجي في وقتها…</p>
-          <p>
-            في حياة كل واحد فينا بيكون فيه حلم رسم له طريقه، وبيحس إن مفيش
-            طريق تاني غيره. لكن الحقيقة إن مش كل اللي بنتمناه بيكون خير لينا.
-          </p>
-          <blockquote class="msg-quran">
-            ربنا قال: "وعسى أن تكرهوا شيئًا وهو خير لكم، وعسى أن تحبوا شيئًا
-            وهو شر لكم والله يعلم وأنتم لا تعلمون"
-          </blockquote>
-          <p>
-            ممكن حد يكون حاطط كل أمله في حاجة معينة… زي كلية أو طريق معين،
-            ولما ما تحصلش، يحس إن الدنيا وقفت شوية، ويتأثر… وده طبيعي جدًا،
-            لأننا بنتعلق بأحلامنا.
-          </p>
-          <p>
-            بس الفكرة إن ربنا لما بيقفل باب، بيفتح باب تاني، يمكن يكون أنسب
-            لينا حتى لو إحنا مش شايفين ده دلوقتي.
-          </p>
-          <div class="msg-points">
-            <div class="msg-point">
-              <span class="mp-icon">→</span>
-              النجاح مش مرتبط بكلية معينة، لكن مرتبط إنك تكمل وتسعى وتتوكّل على ربنا.
-            </div>
-            <div class="msg-point">
-              <span class="mp-icon">→</span>
-              حتى لو وقعت فترة… ده عادي، المهم إنك تقوم تاني وماتفضلش واقف مكانك.
-            </div>
-            <div class="msg-point">
-              <span class="mp-icon">→</span>
-              يمكن حلمك اتغير… بس مستقبلك لسه قدامك، وربنا دايمًا شايل لك الخير 🤍
-            </div>
+    <div class="personal-message-card">
+      <div class="msg-quote-mark">"</div>
+      <div class="msg-greeting">أهلاً يا <span class="student-name-inline" id="msgName">طالب</span>! 😊</div>
+      <div class="msg-body" style="direction: rtl;">
+        <p>شكراً إنك اجتهدت وخلصت الامتحان ده. كل خطوة بتاخدها في تعلم Office بتقربك أكتر من الاحترافية اللي محتاجها سوق الشغل النهاردة 💼</p>
+        <div class="msg-points">
+          <div class="msg-point">
+            <span class="mp-label">💡 نصيحة مهمة:</span>
+            <p>Microsoft Office مش مجرد أدوات — ده عالم كامل من الإنتاجية. كل ما تتعمق في Excel و PowerPoint، كل ما بتزيد قيمتك المهنية. متوقفش عند الأساسيات!</p>
           </div>
-          <p class="msg-closing">ولو حابب تتكلم في أي وقت… أنا موجود 🤝</p>
-        </div>
-        <div class="msg-signature">
-          <span>— Eng. Ahmed Eid / أحمد عيد</span>
+          <div class="msg-point">
+            <span class="mp-label">🌟 تذكّر دايماً:</span>
+            <p>النجاح مش نهاية الطريق، والفشل مش نهاية العالم. المهم إنك جربت واجتهدت. كل سؤال غلط فيه دليل إنك بتتعلم، وكل سؤال صح فيه خطوة للأمام 🚀</p>
+          </div>
+          <div class="msg-point">
+            <span class="mp-label">🤝 مني ليك:</span>
+            <p>لو محتاج أي مساعدة في Office أو عايز مصادر تعليمية، أنا موجود. متستسلمش واستمر في التعلم — ربنا معاك دايماً 🤍</p>
+          </div>
         </div>
       </div>
-      
+      <div class="msg-signature" style="direction: rtl;"><span>— أحمد 🌿</span></div>
+    </div>
+
+    <div class="review-section">
+      <h2 class="review-section-title" style="direction: rtl;">📋 مراجعة إجاباتك التفصيلية</h2>
+      <div class="review-list" id="reviewList">
+        <!-- Review cards will be injected here -->
+      </div>
+    </div>
+
+    <div class="footer">
+      Eng. Ahmed Eid | أحمد عيد · <strong>Microsoft Office Quiz System 📊</strong>
     </div>
   </div>
-
-  <div class="global-footer">Eng. Ahmed Eid | أحمد عيد — C Language Exam</div>
 
   <script>
-    // --- Data Generation (105 Questions) ---
-    // 50 MCQ, 30 T/F, 15 Output, 10 Write. 
-    // To fit token limits, questions are programmatically generated or compactly defined.
-    const questions = [];
-    
-    // Helper to add MCQ
-    function addMCQ(q, options, ans) {
-      questions.push({ type: 'mcq', q, options, ans, typeLbl: 'MCQ' });
-    }
-    // Helper to add T/F
-    function addTF(q, ans) {
-      questions.push({ type: 'tf', q, ans, typeLbl: 'T/F' });
-    }
-    // Helper to add Output
-    function addOutput(code, ans) {
-      questions.push({ type: 'output', q: '<div dir="rtl">ما ناتج هذا الكود؟</div><div dir="ltr" class="en" style="font-size: 0.95rem; color: var(--text-2);">What is the output of this code?</div>', code, ans, typeLbl: 'Output' });
-    }
-    // Helper to add Write
-    function addWrite(q, modelAns) {
-      questions.push({ type: 'write', q, ans: null, modelAns: modelAns, typeLbl: 'Code' }); // ans=null means manual grading (full credit on attempt)
-    }
+    // --- Data Definition (150 Questions in English based on curriculum PDFs) ---
+    // Format: [Question, OptA, OptB, OptC, OptD, CorrectIndex(0-3), Type]
+    const qData = [
+      // ================= GENERAL / OFFICE AUTOMATION (10 Questions) =================
+      ["Which of the following is a main objective of Office Automation?", "Paperless work environment", "Increasing paper consumption", "Making calculations harder", "Reducing security", 0, "General"],
+      ["Which activity involves sharing data between people?", "Data Storage", "Data Exchange", "Data Processing", "Data Deletion", 1, "General"],
+      ["What is the keyboard shortcut for saving a document in MS Office?", "Ctrl + P", "Ctrl + N", "Ctrl + S", "Ctrl + O", 2, "General"],
+      ["What is the keyboard shortcut for creating a New document?", "Ctrl + S", "Ctrl + O", "Ctrl + N", "Ctrl + M", 2, "General"],
+      ["What is the keyboard shortcut for opening an existing document?", "Ctrl + N", "Ctrl + O", "Ctrl + P", "Ctrl + F", 1, "General"],
+      ["What is the common shortcut to print a document in Microsoft Office?", "Ctrl + S", "Ctrl + P", "Ctrl + F", "Ctrl + N", 1, "General"],
+      ["What is the keyboard shortcut for Copy?", "Ctrl + V", "Ctrl + X", "Ctrl + C", "Ctrl + Z", 2, "General"],
+      ["What is the keyboard shortcut for Paste?", "Ctrl + C", "Ctrl + X", "Ctrl + P", "Ctrl + V", 3, "General"],
+      ["What is the keyboard shortcut for Cut?", "Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + Z", 0, "General"],
+      ["Which tool allows you to copy formatting from one place and apply it to another?", "Format Painter", "Copy Paste", "Duplicate", "Style Copier", 0, "General"],
 
-    // --- 1. MCQs (50) ---
-    const mcqData = [
-      ["What is the correct syntax to output 'Hello' in C?", ["echo 'Hello';", "printf('Hello');", "console.log('Hello');", "print('Hello');"], 1],
-      ["Which of the following is a valid C data type?", ["int", "integer", "number", "floatNum"], 0],
-      ["How do you create a single-line comment in C?", ["/* comment */", "// comment", "# comment", "<!-- comment -->"], 1],
-      ["What is the format specifier for a float?", ["%d", "%c", "%f", "%s"], 2],
-      ["What is the size of 'int' on a typical 32-bit system?", ["1 byte", "2 bytes", "4 bytes", "8 bytes"], 2],
-      ["Which operator is used to get the memory address of a variable?", ["*", "&", "%", "&&"], 1],
-      ["What does the 'break' statement do?", ["Exits the program", "Skips an iteration", "Exits the loop/switch", "Restarts the loop"], 2],
-      ["Arrays in C are ___-indexed.", ["0", "1", "-1", "Depends on OS"], 0],
-      ["Which library is required for printf()?", ["<stdlib.h>", "<conio.h>", "<stdio.h>", "<math.h>"], 2],
-      ["How do you declare a pointer to an integer?", ["int ptr*", "int *ptr", "*int ptr", "pointer int ptr"], 1],
-      ["What is the result of 5 % 2?", ["2.5", "2", "1", "0"], 2],
-      ["Which keyword is used to return a value from a function?", ["yield", "break", "return", "output"], 2],
-      ["Strings in C are arrays of characters ending with:", ["\\n", "\\0", "EOF", "NULL"], 1],
-      ["What is the maximum value of an unsigned char?", ["127", "255", "256", "65535"], 1],
-      ["Which loop is guaranteed to execute at least once?", ["for", "while", "do-while", "None"], 2],
-      ["What does '++' operator do?", ["Adds 2", "Adds 1", "Multiplies by 2", "Syntax error"], 1],
-      ["How to allocate memory dynamically in C?", ["malloc()", "allocate()", "new", "create()"], 0],
-      ["What is the default return type of main()?", ["void", "int", "char", "float"], 1],
-      ["Which logical operator represents 'AND'?", ["||", "&&", "!", "&"], 1],
-      ["What is a 'struct' in C?", ["A function", "A loop", "A custom data type", "A macro"], 2],
-      ["Which function reads a string with spaces safely?", ["scanf", "gets", "fgets", "read"], 2],
-      ["What does the 'continue' statement do?", ["Exits the loop", "Pauses execution", "Skips to next iteration", "Exits program"], 2],
-      ["Which of these is a bitwise operator?", ["&&", "||", "^", "!"], 2],
-      ["How to define a macro?", ["#define", "#include", "#macro", "#set"], 0],
-      ["What is the correct way to open a file for reading?", ["fopen('file', 'w')", "fopen('file', 'r')", "open('file')", "read('file')"], 1],
-      ["If 'int a = 5;', what is 'a += 3;'?", ["8", "15", "53", "2"], 0],
-      ["What does sizeof() return?", ["Size in bits", "Size in bytes", "Length of string", "Address"], 1],
-      ["Which function frees allocated memory?", ["delete", "remove", "free", "clear"], 2],
-      ["Can an array size be changed after declaration in standard C?", ["Yes", "No", "Only if int", "Only if char"], 1],
-      ["What is the index of the last element in 'int arr[5];'?", ["5", "4", "6", "0"], 1],
-      ["Which header file is needed for strlen()?", ["<string.h>", "<stdlib.h>", "<ctype.h>", "<stdio.h>"], 0],
-      ["What does the 'void' keyword mean?", ["Empty / no type", "Integer", "Error", "Pointer"], 0],
-      ["How to compare two strings?", ["str1 == str2", "compare(str1, str2)", "strcmp(str1, str2)", "equals(str1, str2)"], 2],
-      ["What is the ternary operator?", ["? :", "::", "=>", "->"], 0],
-      ["Which is NOT a valid variable name?", ["_myVar", "my_var", "2ndVar", "var2"], 2],
-      ["What happens if you divide an integer by 0?", ["Returns 0", "Returns NULL", "Runtime error/Crash", "Compiler error"], 2],
-      ["Is C case-sensitive?", ["Yes", "No", "Only for variables", "Only for functions"], 0],
-      ["What does 'FILE' represent in C?", ["A keyword", "A struct", "A primitive type", "A macro"], 1],
-      ["Which function writes a character to stdout?", ["putchar", "writechar", "printc", "outc"], 0],
-      ["How to pass an array to a function?", ["By value", "By reference (pointer)", "Not possible", "Using global only"], 1],
-      ["What is 'argc' in main()?", ["Array of strings", "Argument count", "Error code", "Memory size"], 1],
-      ["What is 'argv' in main()?", ["Argument count", "Array of argument strings", "Return value", "File pointer"], 1],
-      ["Which structure uses LIFO?", ["Queue", "Tree", "Stack", "Graph"], 2],
-      ["What is a segment fault (segfault)?", ["Syntax error", "Invalid memory access", "Division by zero", "File not found"], 1],
-      ["Which function converts string to int?", ["stoi", "atoi", "parse", "toint"], 1],
-      ["How to copy a string?", ["str1 = str2", "copy(str1, str2)", "strcpy(str1, str2)", "str1 == str2"], 2],
-      ["What is an enumerated type?", ["enum", "struct", "union", "typedef"], 0],
-      ["Which operator accesses a struct member via pointer?", [".", "::", "->", "*"], 2],
-      ["What is a union in C?", ["Like struct, but shares memory", "Like array", "Function group", "Macro type"], 0],
-      ["Which keyword creates an alias for a type?", ["alias", "typedef", "define", "struct"], 1]
+      // ================= WORD (40 Questions) =================
+      ["Microsoft Word is a ___ software.", "Word processing", "Spreadsheet", "Database", "Presentation", 0, "Word"],
+      ["The File Tab in Word opens the ___ view.", "Home view", "Backstage view", "Ribbon view", "Status Bar view", 1, "Word"],
+      ["What is the keyboard shortcut for Find?", "Ctrl + F", "Ctrl + H", "Ctrl + G", "Ctrl + D", 0, "Word"],
+      ["What is the keyboard shortcut for Replace?", "Ctrl + F", "Ctrl + H", "Ctrl + R", "Ctrl + E", 1, "Word"],
+      ["What is the keyboard shortcut for Undo?", "Ctrl + Y", "Ctrl + Z", "Ctrl + U", "Ctrl + B", 1, "Word"],
+      ["What is the keyboard shortcut for Redo (reversing an Undo)?", "Ctrl + R", "Ctrl + Z", "Ctrl + Y", "Ctrl + A", 2, "Word"],
+      ["Where is the Quick Access Toolbar usually located?", "Above the Ribbon", "Below the Ribbon", "Inside the File menu", "On the Status Bar", 0, "Word", "qat"],
+      ["Which tab is the most used and incorporates text formatting features like font and paragraph?", "Home", "Design", "Layout", "Insert", 0, "Word", "ribbon"],
+      ["Which tab has tools like undo, drawing tools, stencils, and replay?", "View", "Home", "Design", "Draw", 3, "Word"],
+      ["Which tab is used to add elements like Tables, Pictures, and Charts?", "Design", "Review", "Insert", "Home", 2, "Word"],
+      ["Which tab contains settings for Margins, Orientation, and Columns?", "Design", "Review", "References", "Layout", 3, "Word"],
+      ["To create a Table of Contents, you should go to which tab?", "References", "Insert", "View", "Review", 0, "Word"],
+      ["Which tab is used for Spelling & Grammar check and tracking changes?", "Layout", "View", "Review", "Design", 2, "Word"],
+      ["The blank space around the edges of a page is called:", "Borders", "Margins", "Columns", "Indent", 1, "Word"],
+      ["Switching the page between Portrait and Landscape is changing the:", "Size", "Margins", "Orientation", "Columns", 2, "Word"],
+      ["A faint text or image behind the content of the page is known as:", "Page Border", "Highlight", "Watermark", "Shading", 2, "Word"],
+      ["To split text into vertical blocks like a newspaper, use the ___ tool.", "Margins", "Size", "Orientation", "Columns", 3, "Word"],
+      ["The view that displays the document exactly as it will be printed is:", "Print layout", "Web layout", "Draft", "Full screen", 0, "Word"],
+      ["Which button quickly increases the selected font size?", "Shrink font", "Grow font", "Change case", "Bold", 1, "Word"],
+      ["To make the selected text thicker and heavier, apply:", "Italic", "Underline", "Strikethrough", "Bold", 3, "Word"],
+      ["To add a line directly beneath the selected text, use:", "Bold", "Underline", "Italic", "Subscript", 1, "Word"],
+      ["Which tool removes all formatting from the text, returning it to default?", "Clear formatting", "Delete", "Undo", "Cut", 0, "Word"],
+      ["The 'Sentence case' option does what to the text?", "Makes all letters lowercase", "Makes all letters uppercase", "Capitalizes only the first letter of a sentence", "Capitalizes the first letter of each word", 2, "Word"],
+      ["To type a small number below the text baseline (like the 2 in H2O), use:", "Superscript", "Grow font", "Strikethrough", "Subscript", 3, "Word"],
+      ["To type a small number above the text line (like X²), use:", "Superscript", "Subscript", "Grow font", "Bold", 0, "Word"],
+      ["To color the background behind text (like a highlighter pen), use:", "Font color", "Text Highlight Color", "Shading", "Page color", 1, "Word"],
+      ["Combining two or more table cells into a single cell is called:", "Split cell", "Merge cells", "Delete cell", "Crop", 1, "Word"],
+      ["Dividing one table cell into multiple cells is called:", "Merge cells", "Split cells", "Crop", "Split table", 1, "Word"],
+      ["To remove unwanted outer areas from an inserted picture, use:", "Cut", "Delete", "Crop", "Resize", 2, "Word"],
+      ["To place text anywhere on the page freely, insert a:", "WordArt", "Text Box", "Table", "Shape", 1, "Word"],
+      ["Which tool is used to create a list starting with small dots?", "Numbering", "Bullets", "Shading", "Sort", 1, "Word"],
+      ["To select all content in an Office document, which shortcut is used?", "Ctrl + C", "Ctrl + X", "Ctrl + A", "Ctrl + P", 2, "Word"],
+      ["Nonprinting characters are hidden symbols that:", "Print automatically", "Help in editing but don't show in print", "Cannot be viewed", "Change document margins", 1, "Word"],
+      ["The Tell Me bar can be used to:", "Format tables", "Search for commands and tools quickly", "Save the document", "Change page size", 1, "Word"],
+      ["Use ___ to move up & down through the document pages.", "Tell Me", "vertical scroll bar", "ruler", "ribbon", 1, "Word"],
+      ["The margin defaults are set to top, bottom, left, and right margins.", "1 inch", "No space", "1.08", "8 points", 0, "Word"],
+      ["___ displays your document in full-screen mode.", "Print layout", "Tell Me", "Web layout", "Read Mode", 3, "Word"],
+      ["The wide band of command buttons at the top of the Word window is called:", "Status Bar", "Quick Access Toolbar", "Ribbon", "Scroll Bar", 2, "Word"],
+      ["What does double clicking the mouse button usually do in Word?", "Selects a word", "Selects a paragraph", "Selects the whole document", "Deletes a word", 0, "Word"],
+      ["What ends the current page and starts a new one?", "Page Break", "Section Break", "Enter Key", "Spacebar", 0, "Word"],
+
+      // ================= EXCEL (50 Questions) =================
+      ["Which Microsoft Office application is a spreadsheet program?", "Microsoft Outlook", "Microsoft Access", "Microsoft Excel", "Microsoft Word", 2, "Excel"],
+      ["Which key moves the selection to the beginning of the current row?", "CTRL+HOME", "Enter", "HOME", "Tab", 2, "Excel"],
+      ["Which shortcut moves the selection to the beginning of the entire sheet (cell A1)?", "CTRL + HOME", "HOME", "CTRL + Up", "Shift + Tab", 0, "Excel"],
+      ["In Excel, Rows are identified by:", "Colors", "Letters", "Numbers (1, 2, 3)", "Symbols", 2, "Excel"],
+      ["In Excel, Columns are identified by:", "Numbers", "Letters (A, B, C)", "Math symbols", "Formulas", 1, "Excel"],
+      ["A Cell in Excel is defined as:", "A group of numbers", "The intersection of a row and a column", "A mathematical equation", "A worksheet", 1, "Excel"],
+      ["What is the cell address for the intersection of the 3rd column and 2nd row?", "2C", "C2", "B3", "3C", 1, "Excel"],
+      ["If a cell displays 'A1', 'A' represents the ___ and '1' represents the ___.", "Row, Column", "Column, Row", "Formula, Constant", "File, Sheet", 1, "Excel"],
+      ["An Excel file is called a Workbook. What does it contain?", "Text documents", "One or more Worksheets", "Only one table", "Only columns", 1, "Excel"],
+      ["The top bar displaying the name of the open workbook is the:", "Status Bar", "Title Bar", "Tabs Bar", "Ribbon", 1, "Excel"],
+      ["Which tab opens the Backstage view to manage the file?", "Home Tab", "Insert Tab", "File Tab", "View Tab", 2, "Excel"],
+      ["The Formula Bar displays:", "The contents or formula of the active cell", "File size", "Sheet names", "The scroll bar", 0, "Excel", "formula"],
+      ["The Name Box in Excel displays:", "Cell content", "The address of the active cell (e.g., A1)", "File name", "Zoom percentage", 1, "Excel"],
+      ["What visually identifies the cell you are currently working in?", "The Status bar", "The Cell pointer (highlighted border)", "The Scroll bar", "The row number only", 1, "Excel"],
+      ["To add a new Worksheet, you click on:", "The plus (+) sign next to the current sheet tabs", "The Save button", "The (x) icon", "The formula bar", 0, "Excel"],
+      ["The 'Merge & Center' button is used to:", "Delete a cell", "Combine multiple cells into one and center the text", "Calculate a sum", "Color a cell", 1, "Excel"],
+      ["The AutoSum tool is commonly found in which tabs?", "Insert only", "Home and Formulas", "Page Layout", "File", 1, "Excel"],
+      ["To move to the adjacent cell to the right, press:", "Tab", "Enter", "HOME", "Alt", 0, "Excel"],
+      ["To move to the previous cell (opposite direction of Tab), press:", "CTRL + Tab", "Alt + Tab", "Shift + Tab", "Backspace", 2, "Excel"],
+      ["To select multiple non-adjacent columns, hold down which key while clicking?", "CTRL", "SHIFT", "ALT", "TAB", 0, "Excel"],
+      ["To select an entire row, you click on the:", "Column letter", "Row number", "First cell in the row", "Select All button", 1, "Excel"],
+      ["When you insert a new row in Excel, where does it appear by default?", "Below the selected row", "Above the selected row", "At the end of the table", "At the beginning of the table", 1, "Excel"],
+      ["The quickest way to insert a new column using the mouse is:", "Double-click the column letter", "Right-click the column letter and select Insert", "Drag the mouse", "Click the row number", 1, "Excel"],
+      ["To change the worksheet direction to Right-to-Left, use which tab?", "Home", "Page Layout", "Insert", "View", 1, "Excel"],
+      ["To completely replace the content of a cell, you should:", "Single-click the cell and start typing", "Double-click the cell", "Press the Spacebar", "Use the Home tab", 0, "Excel"],
+      ["To edit the content of a cell (modify without erasing all), you should:", "Single-click and type", "Double-click inside the cell", "Right-click and select Replace", "Press Enter", 1, "Excel"],
+      ["The word 'Computer' typed in a cell is considered what type of data?", "Function", "Number", "Text", "Formula", 2, "Excel"],
+      ["Student grades (like 85, 90) are considered what type of data?", "Text", "Formula", "Number", "Function", 2, "Excel"],
+      ["To add 'Sparklines' to your data, which Ribbon do you use?", "Charts", "Insert", "WordArt", "Shapes", 1, "Excel"],
+      ["To use the 'Conditional Formatting' feature, which Ribbon do you go to?", "Insert", "Page Layout", "Home", "Formulas", 2, "Excel"],
+      ["Which command protects the workbook so others cannot easily edit it?", "Protect Workbook", "Lock Cells", "Hide Sheet", "Encrypt", 0, "Excel"],
+      ["The Sort & Filter tool is located in the Home tab inside the ___ group.", "Editing", "Font", "Cells", "Clipboard", 0, "Excel"],
+      ["A numerical or text entry in a cell that does not automatically change is a:", "Formula", "Variable", "Constant", "Function", 2, "Excel"],
+      ["Combining constants and functions to perform a calculation is called a:", "Formula", "Title", "Label", "Reference", 0, "Excel"],
+      ["The Home tab in Excel contains core groups like:", "Tables and Illustrations", "Font, Alignment, and Number", "Functions and Formulas", "Page Setup", 1, "Excel"],
+      ["To insert a Chart or Picture, you should go to the:", "Home tab", "Insert tab", "Page Layout tab", "Review tab", 1, "Excel"],
+      ["To change the page orientation or adjust margins, use the:", "Page Layout tab", "View tab", "Home tab", "Data tab", 0, "Excel"],
+      ["The Formulas tab contains:", "Drawing tools", "The Function Library", "Table design options", "Spell check", 1, "Excel"],
+      ["To save a previously saved file with the same name and location, use:", "Save As", "New", "Export", "Save", 3, "Excel"],
+      ["To save a file for the first time, or to change its name/location, use:", "Save As", "Save", "Export", "Close", 0, "Excel"],
+      ["The bars that allow you to navigate through the worksheet vertically or horizontally are:", "Status Bars", "Tabs Bars", "Scroll Bars", "Title Bars", 2, "Excel"],
+      ["Applying printing options, fit everything (column & rows) on worksheet, select....", "Fit Sheet on One Page", "Fit All Rows on One Page", "No scaling", "Fit All Columns on One Page", 0, "Excel"],
+      ["In equation A/B+(C*D-E^3) calculated in the order of:", "(), *, /, +, ^ and -", "^, (), *, /, + and -", "(), ^, *, /, + and -", "+, ^, *, /, () and -", 2, "Excel"],
+      ["In Excel, column width is based on the existing sheets. (True/False)", "True", "False", "Only in new sheets", "Always fixed", 1, "Excel"],
+      ["To select only a specific part of the worksheet for printing, you set the:", "Print Area", "Margins", "Orientation", "Scale", 0, "Excel"],
+      ["The Delete command for removing rows or columns is located in the Home tab under which group?", "Font", "Clipboard", "Cells", "Alignment", 2, "Excel"],
+      ["What is the shortcut to cut data from a cell?", "Ctrl + C", "Ctrl + X", "Ctrl + V", "Ctrl + P", 1, "Excel"],
+      ["Which bar shows 'Ready' or 'Edit' mode?", "Status Bar", "Title Bar", "Formula Bar", "Ribbon", 0, "Excel"],
+      ["What happens when you click the File Tab?", "It opens the Home view", "It opens the Backstage view", "It closes the document", "It saves the document", 1, "Excel"],
+      ["In Excel, 'Format Painter' is found in which Ribbon group?", "Font", "Clipboard", "Alignment", "Styles", 1, "Excel"],
+
+      // ================= POWERPOINT (50 Questions) =================
+      ["Microsoft PowerPoint is designed for creating:", "Databases", "Spreadsheets", "Electronic presentations", "Text documents", 2, "PowerPoint"],
+      ["The default file extension for modern PowerPoint presentations is:", ".ppt", ".pptx", ".pdf", ".docx", 1, "PowerPoint"],
+      ["Which of the following formats CANNOT be exported directly from PowerPoint?", "PDF", "MPEG-4 video", "Executable file (.exe)", "GIF image", 2, "PowerPoint"],
+      ["The large area in the middle where you design the active slide is called:", "Slide Sorter", "Slide pane", "Notes pane", "Outline", 1, "PowerPoint"],
+      ["The keyboard shortcut to insert a New Slide is:", "Ctrl + N", "Ctrl + S", "Ctrl + M", "Ctrl + P", 2, "PowerPoint"],
+      ["During a slideshow, to advance to the next slide, you can press:", "Backspace", "Spacebar", "Ctrl", "Alt", 1, "PowerPoint"],
+      ["During a slideshow, to return to the previous slide, you press:", "Spacebar", "Enter", "Backspace", "Shift", 2, "PowerPoint"],
+      ["To delete a specific slide, what is the correct action?", "Press Ctrl+D", "Select the slide and press Delete", "Press Ctrl+X", "Press Esc", 1, "PowerPoint"],
+      ["To create an automatic presentation from a group of images, use:", "Screenshot", "Clip Art", "Photo Album", "SmartArt", 2, "PowerPoint"],
+      ["A feature used to display information in visual blocks and diagrams is:", "Chart", "SmartArt", "Shapes", "WordArt", 1, "PowerPoint"],
+      ["To change the slide size (e.g., from 4:3 to 16:9 Widescreen), go to:", "Transitions tab", "View tab", "Design tab -> Slide Size", "Insert tab", 2, "PowerPoint"],
+      ["Motion effects that occur when moving from one slide to the next are called:", "Animations", "Themes", "Transitions", "SmartArt", 2, "PowerPoint"],
+      ["In the Transitions tab, the Duration option controls:", "The speed of the transition effect itself", "How long the slide stays on screen", "Volume level", "Text animation speed", 0, "PowerPoint"],
+      ["To make a slide automatically advance after 5 seconds, use:", "On Mouse Click", "Duration", "Delay", "Advance Slide -> After", 3, "PowerPoint"],
+      ["Motion effects applied to text and objects inside the slide itself are called:", "Transitions", "Animations", "Themes", "Illustrations", 1, "PowerPoint"],
+      ["A tool that allows you to copy an animation effect from one object to another:", "Format Painter", "Animation Pane", "Animation Painter", "Trigger", 2, "PowerPoint"],
+      ["To start the presentation from the very first slide, choose:", "From Current Slide", "From Beginning", "Present Online", "Custom Show", 1, "PowerPoint"],
+      ["Which option lets you practice and record the time spent on each slide?", "Record Slide Show", "Hide Slide", "Rehearse Timings", "Presenter View", 2, "PowerPoint"],
+      ["To add a note for a colleague reviewing your presentation, use:", "Text Box", "SmartArt", "New Comment (Review tab)", "WordArt", 2, "PowerPoint"],
+      ["The view that displays all slides as thumbnails to easily rearrange them is:", "Normal", "Slide Sorter", "Reading View", "Notes Page", 1, "PowerPoint"],
+      ["The default view when you open PowerPoint is:", "Normal", "Slide Show", "Slide Sorter", "Outline", 0, "PowerPoint"],
+      ["An option that helps align objects using a visual grid:", "Zoom", "View Direction", "Gridlines/Guides", "Macros", 2, "PowerPoint"],
+      ["Can Date & Time be set to update automatically in the slide footer?", "Yes", "No", "Only the slide number updates", "Only manually", 0, "PowerPoint"],
+      ["To insert a video or audio clip, use the Media group in which tab?", "Home", "Design", "Insert", "Transitions", 2, "PowerPoint"],
+      ["To apply the same transition effect to all slides, click:", "Format Background", "Apply To All", "Reset", "Trigger", 1, "PowerPoint"],
+      ["Fade, Push, and Wipe are examples of:", "Slide Views", "Animations", "Transitions", "Fonts", 2, "PowerPoint"],
+      ["To view a list of all animations on the current slide and reorder them, open:", "Navigation Pane", "Slide Pane", "Animation Pane", "Reviewing Pane", 2, "PowerPoint"],
+      ["To start the slideshow from the currently selected slide, choose:", "From Beginning", "From Current Slide", "Custom Show", "Present Online", 1, "PowerPoint"],
+      ["What is the shortcut key to start the Slide Show from the beginning?", "F5", "F1", "Ctrl + M", "Ctrl + P", 0, "PowerPoint"],
+      ["To view two PowerPoint files side-by-side for comparison, use:", "New Window", "Arrange All / Cascade", "Zoom", "Fit to Window", 1, "PowerPoint"],
+      ["In PowerPoint, the Slide Layout determines the positions of:", "Placeholders for content", "Screen colors", "Slide transitions", "Word count", 0, "PowerPoint"],
+      ["The Zoom slider control is located in the:", "Title Bar", "Quick Access Toolbar", "Status Bar (bottom)", "Ribbon", 2, "PowerPoint"],
+      ["To change the appearance of all slides at once (like master fonts and backgrounds), edit the:", "Slide Sorter", "Slide Master", "Animation Pane", "Notes View", 1, "PowerPoint"],
+      ["When a Shape is selected, a new contextual tab appears called:", "Design", "Shape Format", "Review", "View", 1, "PowerPoint"],
+      ["The Presenter View is useful for:", "Printing slides", "Showing speaker notes privately while the audience sees the slide", "Adding animations", "Converting to video", 1, "PowerPoint"],
+      ["To prevent a slide from showing during the presentation without deleting it, use:", "Delete Slide", "Hide Slide", "Skip Slide", "Remove Slide", 1, "PowerPoint"],
+      ["To insert a clickable link that opens a webpage, use:", "Hyperlink / Link", "SmartArt", "Action Button only", "Video", 0, "PowerPoint"],
+      ["A PowerPoint presentation can be saved as a video in which format?", "MP4 or WMV", "PDF only", "DOCX", "XLSX", 0, "PowerPoint"],
+      ["For successful slide design, it is recommended to:", "Write very long paragraphs", "Use tiny fonts", "Rely on concise bullet points and use images", "Color every word differently", 2, "PowerPoint"],
+      ["To add the current slide number to all slides, go to:", "Home", "Insert -> Slide Number", "Design", "Transitions", 1, "PowerPoint"],
+      ["Which pane controls the order and timing of animations?", "Navigation Pane", "Slide Pane", "Animation Pane", "Reviewing Pane", 2, "PowerPoint"],
+      ["What is the shortcut to start the Slide Show from the CURRENT slide?", "F5", "Shift + F5", "Ctrl + F5", "Alt + F5", 1, "PowerPoint"],
+      ["To compare and merge changes from different presentations, use which tab?", "Home", "Insert", "Review", "View", 2, "PowerPoint"],
+      ["What does the 'Show Tabs and Commands' option do?", "Closes PowerPoint", "Maximizes the Ribbon display", "Deletes all formatting", "Resets the slide layout", 1, "PowerPoint"],
+      ["What happens when you use the 'Show Tabs' option for the Ribbon?", "The Ribbon is hidden completely", "Only tabs are visible, commands are hidden", "Ribbon becomes smaller", "Nothing changes", 1, "PowerPoint"],
+      ["Which of the following cannot be inserted directly into a slide?", "Table", "Chart", "A running Executable file (.exe)", "SmartArt", 2, "PowerPoint"],
+      ["Which tool lets you insert icons, pictures, and shapes?", "Animation tab", "Insert tab", "Design tab", "Home tab", 1, "PowerPoint"],
+      ["What does the Zoom feature do in PowerPoint?", "Changes transition speed", "Changes text font", "Adjusts the view scale of slides", "Shows speaker notes", 2, "PowerPoint"],
+      ["What is the Slide Show view used for?", "Editing charts", "Designing layouts", "Presenting to an audience", "Printing handouts", 2, "PowerPoint"],
+      ["What kind of multimedia can be inserted into slides?", "Only audio", "Only video", "Audio and video clips", "Only images", 2, "PowerPoint"]
     ];
-    mcqData.forEach(d => addMCQ(d[0], d[1], d[2]));
 
-    // --- 2. True/False (30) ---
-    const tfData = [
-      ["C is an object-oriented programming language.", false],
-      ["The entry point of a C program is the main() function.", true],
-      ["Comments in C affect the execution speed.", false],
-      ["An array can hold different data types in C.", false],
-      ["Variables must be declared before they are used.", true],
-      ["The & operator is used to get the value at an address.", false],
-      ["Global variables are accessible throughout the program.", true],
-      ["A pointer can point to another pointer.", true],
-      ["The switch statement only works with integer or character types.", true],
-      ["In C, 'a' and 'A' are considered the same variable.", false],
-      ["The default value of a local integer variable is 0.", false],
-      ["Memory allocated by malloc() is initialized to zero.", false],
-      ["calloc() initializes the allocated memory to zero.", true],
-      ["A struct can contain a pointer to its own type.", true],
-      ["Functions in C can be nested (defining a function inside another).", false],
-      ["The continue statement exits the entire loop.", false],
-      ["Strings in C are immutable (cannot be changed).", false],
-      ["sizeof is a keyword/operator, not a function.", true],
-      ["A 'do-while' loop condition is checked at the beginning of the loop.", false],
-      ["You can use '==' to compare the contents of two string arrays directly.", false],
-      ["Typecasting can be used to convert a float to an int.", true],
-      ["An uninitialized pointer is called a wild pointer.", true],
-      ["#include is handled by the preprocessor.", true],
-      ["The compiler ignores whitespace spaces and blank lines.", true],
-      ["EOF is defined in <stdio.h>.", true],
-      ["A function can return multiple values directly in C.", false],
-      ["The operator '%' cannot be applied to float types.", true],
-      ["Constants declared with 'const' can be changed later.", false],
-      ["You can return an array from a function directly by value.", false],
-      ["'break' can be used to exit an 'if' statement.", false]
-    ];
-    tfData.forEach(d => addTF(d[0], d[1]));
+    // مصفوفة الإجابات
+    let userAnswers = new Array(qData.length).fill(null);
 
-    // --- 3. Output Prediction (15) ---
-    const outputData = [
-      [`int i = 5;\nprintf("%d", i++);`, "5"],
-      [`int i = 5;\nprintf("%d", ++i);`, "6"],
-      [`int a = 10, b = 20;\nprintf("%d", a > b ? a : b);`, "20"],
-      [`int arr[] = {1, 2, 3};\nprintf("%d", arr[1]);`, "2"],
-      [`int x = 5;\nint *p = &x;\n*p = 10;\nprintf("%d", x);`, "10"],
-      [`for(int i=0; i<3; i++) {\n  if(i==1) break;\n  printf("%d", i);\n}`, "0"],
-      [`int a = 4;\nprintf("%d", a % 3);`, "1"],
-      [`char str[] = "C";\nprintf("%lu", sizeof(str));`, "2"], // 1 char + \0
-      [`int x = 2;\nswitch(x) {\n  case 1: printf("A");\n  case 2: printf("B");\n  case 3: printf("C");\n}`, "BC"], // missing break
-      [`int i = 0;\nwhile(i < 0) {\n  printf("X");\n}\nprintf("Y");`, "Y"],
-      [`printf("%d", (float)5/2);`, "Format issue / undefined / error"], // tricky one, asking for concepts. Let's accept anything conceptually close
-      [`int a = 5;\nprintf("%d", a == 5);`, "1"],
-      [`int i;\nfor(i=0; i<5; i++);\nprintf("%d", i);`, "5"],
-      [`int x = 5;\nprintf("%d", x << 1);`, "10"],
-      [`char c = 'A';\nprintf("%d", c);`, "65"]
-    ];
-    // We will use open-ended answers for output to be generous
-    outputData.forEach(d => addOutput(d[0], d[1]));
+    // العناصر الأساسية
+    const s1 = document.getElementById('screen1');
+    const s2 = document.getElementById('screen2');
+    const s3 = document.getElementById('screen3');
+    const nameInput = document.getElementById('studentName');
+    const qContainer = document.getElementById('questionContainer');
+    const progressBar = document.getElementById('progressBar');
+    const confirmModal = document.getElementById('confirmModal');
+    const answeredCount = document.getElementById('answeredCount');
 
-    // --- 4. Write Code (10) ---
-    const writeData = [
-      [
-        "Write a C program to print 'Hello World'.\nاكتب برنامج يطبع Hello World",
-        "#include <stdio.h>\n\nint main() {\n    printf(\"Hello World\");\n    return 0;\n}"
-      ],
-      [
-        "Write a function that returns the sum of two integers.\nاكتب دالة ترجع مجموع رقمين",
-        "int sum(int a, int b) {\n    return a + b;\n}"
-      ],
-      [
-        "Write a program to check if a number is even or odd.\nاكتب برنامج لمعرفة إذا كان الرقم زوجي أو فردي",
-        "#include <stdio.h>\n\nint main() {\n    int num;\n    scanf(\"%d\", &num);\n    if (num % 2 == 0) {\n        printf(\"Even\");\n    } else {\n        printf(\"Odd\");\n    }\n    return 0;\n}"
-      ],
-      [
-        "Write a function to find the maximum of 3 numbers.\nاكتب دالة لإيجاد الأكبر بين 3 أرقام",
-        "int findMax(int a, int b, int c) {\n    int max = a;\n    if (b > max) max = b;\n    if (c > max) max = c;\n    return max;\n}"
-      ],
-      [
-        "Write a loop to print numbers from 1 to 10.\nاكتب حلقة تكرار لطباعة الأرقام من 1 لـ 10",
-        "#include <stdio.h>\n\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        printf(\"%d \", i);\n    }\n    return 0;\n}"
-      ],
-      [
-        "Write a function that calculates the factorial of a number.\nاكتب دالة لحساب المضروب (Factorial)",
-        "int factorial(int n) {\n    if (n == 0 || n == 1)\n        return 1;\n    return n * factorial(n - 1);\n}"
-      ],
-      [
-        "Write a function to reverse an array of integers.\nاكتب دالة لعكس عناصر مصفوفة",
-        "void reverseArray(int arr[], int size) {\n    int temp;\n    for (int i = 0; i < size / 2; i++) {\n        temp = arr[i];\n        arr[i] = arr[size - 1 - i];\n        arr[size - 1 - i] = temp;\n    }\n}"
-      ],
-      [
-        "Write a program to swap two variables without a third variable.\nاكتب كود لتبديل قيمتين بدون متغير ثالث",
-        "#include <stdio.h>\n\nint main() {\n    int a = 5, b = 10;\n    a = a + b;\n    b = a - b;\n    a = a - b;\n    printf(\"a=%d, b=%d\", a, b);\n    return 0;\n}"
-      ],
-      [
-        "Write a function that checks if a string is a palindrome.\nاكتب دالة للتحقق من أن النص يقرأ من اليمين كيساره",
-        "#include <string.h>\n\nint isPalindrome(char str[]) {\n    int l = 0;\n    int h = strlen(str) - 1;\n    while (h > l) {\n        if (str[l++] != str[h--]) {\n            return 0; // Not Palindrome\n        }\n    }\n    return 1; // Palindrome\n}"
-      ],
-      [
-        "Write a struct for a 'Student' with id and marks.\nقم بتعريف Struct لطالب يحتوي على ID ودرجات",
-        "struct Student {\n    int id;\n    float marks;\n};"
-      ]
-    ];
-    writeData.forEach(q => addWrite(q[0], q[1]));
+    // الأيقونات وعناوين الأقسام
+    const icons = {
+      "Word": "📝",
+      "Excel": "📊",
+      "PowerPoint": "🖥️"
+    };
 
-    // Shuffle questions slightly for variety, but keep categories somewhat grouped
-    // For this exam, we'll keep the exact array order as generated to ensure 105 distinct questions are loaded.
+    const categoryTitles = {
+      "Word": "📝 Microsoft Word Section",
+      "Excel": "📊 Microsoft Excel Section",
+      "PowerPoint": "🖥️ Microsoft PowerPoint Section"
+    };
 
-    let studentName = '';
-    const userAnswers = new Array(questions.length).fill(null);
-
-    // --- Floating Tokens Logic ---
-    function initTokens() {
-      const tokens = ['#include <stdio.h>', 'int main()', 'return 0;', 'printf()', 'malloc()', 'pointer', 'while(1)', 'struct'];
-      const container = document.getElementById('tokensContainer');
-      for(let i=0; i<15; i++) {
-        let el = document.createElement('div');
-        el.className = 'bg-token';
-        el.innerText = tokens[Math.floor(Math.random() * tokens.length)];
-        el.style.left = Math.random() * 100 + 'vw';
-        el.style.animationDuration = (10 + Math.random() * 20) + 's';
-        el.style.animationDelay = '-' + (Math.random() * 20) + 's';
-        el.style.fontSize = (0.8 + Math.random() * 1.5) + 'rem';
-        container.appendChild(el);
+    function getDiagramHTML(type) {
+      if(type === 'qat') {
+        return `<div class="css-diagram"><div class="diag-qat"><div class="diag-qat-icon">💾</div><div class="diag-qat-icon">↩️</div><div class="diag-qat-icon">↪️</div></div></div>`;
       }
-    }
-    initTokens();
-
-    // --- Navigation & Initialization ---
-    function showScreen(n) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById('screen' + n).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if(type === 'ribbon') {
+        return `<div class="css-diagram"><div class="diag-ribbon"><div class="diag-ribbon-tab">File</div><div class="diag-ribbon-tab active">Home</div><div class="diag-ribbon-tab">Insert</div></div></div>`;
+      }
+      if(type === 'formula') {
+        return `<div class="css-diagram"><div class="diag-formula"><div class="diag-fx">fx</div><div class="diag-input">=SUM(A1:B2)</div></div></div>`;
+      }
+      return '';
     }
 
     function startExam() {
-      const nameInput = document.getElementById('studentName');
       const name = nameInput.value.trim();
       if (!name) {
-        const error = document.getElementById('nameError');
-        error.style.display = 'block';
-        nameInput.classList.remove('shake');
-        void nameInput.offsetWidth; // trigger reflow
-        nameInput.classList.add('shake');
+        nameInput.classList.add('error');
+        nameInput.placeholder = "اكتب اسمك الأول أولاً 😊";
+        setTimeout(() => nameInput.classList.remove('error'), 400);
         return;
       }
-      studentName = name;
+      
+      document.getElementById('msgName').innerText = name;
+      
       renderQuestions();
-      showScreen(2);
+
+      // طريقة آمنة بنسبة 100% لإخفاء الشاشة الأولى وإظهار الثانية
+      s1.style.display = 'none';
+      s1.classList.remove('active');
+      
+      s2.style.display = 'block';
+      s2.classList.add('active');
+      window.scrollTo(0, 0);
     }
 
-    // --- Render Questions ---
     function renderQuestions() {
-      const container = document.getElementById('questions-container');
-      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      qContainer.innerHTML = '';
+      
+      let htmlStr = '';
+      let currentCategory = '';
 
-      questions.forEach((q, idx) => {
-        let html = `
-          <div class="q-card" id="qcard-${idx}">
+      qData.forEach((q, index) => {
+        const qstText = q[0];
+        const opts = [q[1], q[2], q[3], q[4]];
+        const type = q[6];
+        const diagType = q[7];
+
+        if (type !== currentCategory) {
+          const displayTitle = categoryTitles[type] || `${type} Section`;
+          htmlStr += `<div class="category-header">${displayTitle}</div>`;
+          currentCategory = type;
+        }
+
+        let optsHTML = opts.map((optText, optIndex) => {
+          const isSelected = userAnswers[index] === optIndex ? 'selected' : '';
+          return `
+            <label class="mcq-option ${isSelected}" id="opt_${index}_${optIndex}" onclick="selectOption(${index}, ${optIndex})">
+              <span class="opt-letter">${letters[optIndex]}</span>
+              <span class="opt-text">${optText}</span>
+              <span class="opt-check">✓</span>
+            </label>
+          `;
+        }).join('');
+
+        let diagHTML = diagType ? getDiagramHTML(diagType) : '';
+
+        htmlStr += `
+          <div class="question-card" id="qCard_${index}">
             <div class="q-header">
-              <span class="q-num">${(idx + 1).toString().padStart(2, '0')}</span>
-              <span class="q-type-pill">${q.typeLbl}</span>
+              <span class="q-num">Q${String(index + 1).padStart(3, '0')}</span>
+              <span class="q-type" title="${type}">${icons[type] || '❓'}</span>
             </div>
-        `;
-
-        if (q.type === 'mcq') {
-          html += `<div class="q-text" dir="auto">${q.q}</div>`;
-          html += `<div class="mcq-grid">`;
-          const letters = ['A', 'B', 'C', 'D'];
-          q.options.forEach((opt, optIdx) => {
-            html += `
-              <label class="mcq-option" id="mcq-${idx}-${optIdx}" onclick="selectMCQ(${idx}, ${optIdx})">
-                <span class="opt-letter">${letters[optIdx]}</span>
-                <span class="opt-text">${opt.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
-                <span class="opt-check">✓</span>
-              </label>
-            `;
-          });
-          html += `</div>`;
-        } 
-        else if (q.type === 'tf') {
-          html += `<div class="q-text" dir="auto">${q.q}</div>`;
-          html += `
-            <div class="tf-grid">
-              <button class="tf-btn" id="tf-${idx}-true" onclick="selectTF(${idx}, true)">✅ صح / True</button>
-              <button class="tf-btn" id="tf-${idx}-false" onclick="selectTF(${idx}, false)">❌ خطأ / False</button>
-            </div>
-          `;
-        }
-        else if (q.type === 'output') {
-          html += `<div class="q-text" dir="auto">${q.q}</div>`;
-          html += `
-            <div class="code-wrapper">
-              <pre class="language-c"><code class="language-c">${q.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
-              <input class="ans-input" type="text" placeholder="// Write output here..." oninput="updateInput(${idx}, this.value)" />
-            </div>
-          `;
-        }
-        else if (q.type === 'write') {
-          let qTextLines = q.q.split('\n').map(line => `<div dir="auto">${line}</div>`).join('');
-          html += `<div class="q-text" style="display:flex; flex-direction:column; gap:8px;">${qTextLines}</div>`;
-          html += `
-            <div class="code-wrapper">
-              <textarea class="ans-textarea" rows="6" placeholder="// Write your C code here..." oninput="updateInput(${idx}, this.value)"></textarea>
-            </div>
-          `;
-        }
-
-        html += `</div>`;
-        container.insertAdjacentHTML('beforeend', html);
-      });
-
-      // Syntax Highlight (with slight delay to ensure DOM is ready)
-      setTimeout(() => {
-        Prism.highlightAll();
-      }, 50);
-
-      // Intersection Observer for Slide Up animations
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add('slide-up');
-            }, i * 50); // stagger
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-
-      document.querySelectorAll('.q-card').forEach(card => observer.observe(card));
-    }
-
-    // --- Interactions ---
-    function updateProgress() {
-      let answered = userAnswers.filter(a => a !== null && a !== '').length;
-      document.getElementById('ans-count').innerText = answered;
-      let pct = (answered / questions.length) * 100;
-      document.getElementById('progress-fill').style.width = pct + '%';
-    }
-
-    function markCardAnswered(idx) {
-      document.getElementById(`qcard-${idx}`).classList.add('answered');
-      updateProgress();
-    }
-
-    function selectMCQ(qIdx, optIdx) {
-      userAnswers[qIdx] = optIdx;
-      // UI Update
-      for(let i=0; i<4; i++) {
-        let el = document.getElementById(`mcq-${qIdx}-${i}`);
-        if(el) el.classList.remove('selected');
-      }
-      document.getElementById(`mcq-${qIdx}-${optIdx}`).classList.add('selected');
-      markCardAnswered(qIdx);
-    }
-
-    function selectTF(qIdx, val) {
-      userAnswers[qIdx] = val;
-      document.getElementById(`tf-${qIdx}-true`).classList.remove('selected', 'true');
-      document.getElementById(`tf-${qIdx}-false`).classList.remove('selected', 'false');
-      
-      let el = document.getElementById(`tf-${qIdx}-${val}`);
-      el.classList.add('selected', val ? 'true' : 'false');
-      markCardAnswered(qIdx);
-    }
-
-    function updateInput(qIdx, val) {
-      userAnswers[qIdx] = val.trim();
-      if(val.trim() !== '') {
-        markCardAnswered(qIdx);
-      } else {
-        document.getElementById(`qcard-${qIdx}`).classList.remove('answered');
-        updateProgress();
-      }
-    }
-
-    // --- Modal Logic ---
-    function openSubmitModal() {
-      let answered = userAnswers.filter(a => a !== null && a !== '').length;
-      let missing = questions.length - answered;
-      
-      let desc = document.getElementById('modal-desc-text');
-      if (missing > 0) {
-        desc.innerHTML = `لسه فاضل <b style="color:var(--danger)">${missing}</b> سؤال مجاوبتش عليهم.<br>متأكد إنك عايز تنهي؟`;
-      } else {
-        desc.innerHTML = `عاش يا بطل! جاوبت على كل الأسئلة.<br>متأكد إنك عايز تسلم؟`;
-      }
-      document.getElementById('submitModal').classList.add('active');
-    }
-
-    function closeSubmitModal() {
-      document.getElementById('submitModal').classList.remove('active');
-    }
-
-    // --- Scoring & Results ---
-    function submitExam() {
-      closeSubmitModal();
-      
-      // Calculate Score (Electronic grading only)
-      let gradedAnswered = 0;
-      let gradedCorrect = 0;
-      let gradedSkipped = 0;
-
-      for (let i = 0; i < questions.length; i++) {
-        const answer = userAnswers[i];
-        const q = questions[i];
-        
-        // Exclude manual grading questions from the automatic score
-        if (q.type === 'write' || q.ans === null) {
-          continue;
-        }
-
-        const isEmpty = answer === null || answer === undefined || 
-                        (typeof answer === 'string' && answer.trim() === '');
-        
-        if (!isEmpty) {
-          gradedAnswered++;
-          
-          // Check correctness based on type
-          if (q.type === 'mcq' || q.type === 'tf') {
-            if (answer === q.ans) gradedCorrect++;
-          } else if (q.type === 'output') {
-            // Loose string match for output
-            if (String(answer).trim().toLowerCase() === String(q.ans).trim().toLowerCase()) {
-              gradedCorrect++;
-            }
-          }
-        } else {
-          gradedSkipped++;
-        }
-      }
-
-      const percentage = gradedAnswered > 0 ? Math.round((gradedCorrect / gradedAnswered) * 100) : 0;
-
-      showResults(gradedAnswered, gradedCorrect, gradedSkipped, percentage);
-    }
-
-    function showResults(answered, correct, skipped, pct) {
-      showScreen(3);
-
-      // Setup Ahmed Eid Message Name
-      document.getElementById('msg-student-name').innerText = studentName;
-
-      // Stats Count Up
-      countUp('st-ans', answered, 1000);
-      setTimeout(() => countUp('st-cor', correct, 1000), 150);
-      setTimeout(() => countUp('st-wro', answered - correct, 1000), 300);
-      setTimeout(() => countUp('st-skp', skipped, 1000), 450);
-
-      // Score Label
-      document.getElementById('score-lbl').innerText = `${correct} من ${answered}`;
-
-      // Badge logic
-      let badge = '';
-      let ringColor = 'var(--success)';
-      if (pct >= 90) { badge = '🏆 ممتاز! أنت نجم الدفعة'; }
-      else if (pct >= 75) { badge = '🥇 جيد جداً! مستواك عالي'; }
-      else if (pct >= 60) { badge = '🥈 جيد — استمر وهتوصل'; }
-      else if (pct >= 40) { badge = '💪 تمام — لازم تراجع أكتر'; ringColor = 'var(--gold)'; }
-      else { badge = '📚 متأخرتش — ابدأ من الأساسيات'; ringColor = 'var(--danger)'; }
-      
-      document.getElementById('perf-badge').innerText = badge;
-
-      // Ring Animation
-      const ring = document.getElementById('score-ring');
-      ring.style.stroke = ringColor;
-      // 502 is circumference. offset 502 = 0%. offset 0 = 100%.
-      setTimeout(() => {
-        const offset = 502 - (502 * (pct / 100));
-        ring.style.strokeDashoffset = offset;
-        countUp('score-val', pct, 1500);
-      }, 300);
-
-      // Confetti
-      if (pct >= 70) {
-        triggerConfetti();
-      }
-
-      // Build Review Section
-      buildReviewSection();
-
-      // Show Ahmed Eid Message
-      setTimeout(() => {
-        document.getElementById('msg-card').classList.add('show');
-      }, 600);
-    }
-
-    // --- Review Section Helpers ---
-    function toggleReview() {
-      const content = document.getElementById('review-content');
-      const icon = document.getElementById('rev-icon');
-      if (content.classList.contains('open')) {
-        content.classList.remove('open');
-        icon.innerText = '+';
-      } else {
-        content.classList.add('open');
-        icon.innerText = '−';
-      }
-    }
-
-    function buildReviewSection() {
-      const container = document.getElementById('review-content');
-      container.innerHTML = '';
-      
-      questions.forEach((q, i) => {
-        const uAns = userAnswers[i];
-        const isEmpty = uAns === null || uAns === undefined || (typeof uAns === 'string' && uAns.trim() === '');
-        
-        let status = '';
-        let statusClass = '';
-        let uAnsText = isEmpty ? 'لم تجب على هذا السؤال' : uAns;
-        let cAnsText = q.ans !== null ? q.ans : 'سؤال برمجي يحتاج تقييم المدرس';
-
-        // Format MCQ
-        if (q.type === 'mcq') {
-            if (!isEmpty) uAnsText = String.fromCharCode(65 + parseInt(uAns)) + ' - ' + q.options[parseInt(uAns)].replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            if (q.ans !== null) cAnsText = String.fromCharCode(65 + parseInt(q.ans)) + ' - ' + q.options[parseInt(q.ans)].replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-        // Format TF
-        if (q.type === 'tf') {
-            if (!isEmpty) uAnsText = uAns ? 'صح / True' : 'خطأ / False';
-            if (q.ans !== null) cAnsText = q.ans ? 'صح / True' : 'خطأ / False';
-        }
-
-        // Check Correctness
-        let isCorrect = false;
-        if (!isEmpty && q.ans !== null) {
-            if (q.type === 'mcq' || q.type === 'tf') isCorrect = (uAns === q.ans);
-            else if (q.type === 'output') isCorrect = (String(uAns).trim().toLowerCase() === String(q.ans).trim().toLowerCase());
-        }
-
-        if (isEmpty) {
-            status = '⬜ تُركت'; statusClass = 'skipped';
-        } else if (q.ans === null || q.type === 'write') {
-            status = '✍️ تحتاج تصحيح يدوي'; statusClass = 'manual';
-        } else {
-            if (isCorrect) { status = '✅ إجابة صحيحة'; statusClass = 'correct'; }
-            else { status = '❌ إجابة خاطئة'; statusClass = 'wrong'; }
-        }
-
-        let codeHtml = q.code ? `<div dir="ltr" class="code-wrapper" style="margin-top:0; margin-bottom: 16px;"><pre class="language-c" style="margin-bottom:0 !important; border:none !important;"><code class="language-c">${q.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre></div>` : '';
-        
-        let uAnsColorClass = isCorrect ? 'corr' : (isEmpty ? '' : 'err');
-        if(q.ans === null || q.type === 'write') uAnsColorClass = ''; // Write code answers
-
-        let cansHtml = '';
-        if (q.type === 'write' && q.modelAns) {
-            cansHtml = `
-              <div class="rev-cans">
-                <b>نموذج الإجابة المقترح:</b>
-                <div dir="ltr" class="code-wrapper" style="margin-top: 12px; padding: 0;">
-                  <pre class="language-c" style="margin: 0 !important; border: none !important;"><code class="language-c">${q.modelAns.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
-                </div>
-              </div>`;
-        } else if (q.ans !== null && !isCorrect) {
-            cansHtml = `<div class="rev-cans"><b>الإجابة الصحيحة:</b> <span dir="auto" style="font-family: var(--font-code);">${String(cAnsText)}</span></div>`;
-        }
-
-        let html = `
-          <div class="rev-card ${statusClass}">
-            <div class="rev-header">
-               <span class="rev-status">${status}</span>
-               <span class="rev-num en" dir="ltr">Q${(i + 1).toString().padStart(2, '0')}</span>
-            </div>
-            <div class="rev-q" dir="auto">${q.q}</div>
-            ${codeHtml}
-            <div class="rev-answers">
-                <div class="rev-uans ${uAnsColorClass}"><b>إجابتك:</b> <div dir="auto" style="font-family: var(--font-code); white-space: pre-wrap; margin-top: 8px;">${String(uAnsText).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div></div>
-                ${cansHtml}
+            <div class="q-text">${qstText}</div>
+            ${diagHTML}
+            <div class="mcq-options">
+              ${optsHTML}
             </div>
           </div>
         `;
-        container.insertAdjacentHTML('beforeend', html);
       });
-      
-      // Highlight code blocks inside the review section
-      setTimeout(() => Prism.highlightAll(), 50);
+
+      htmlStr += `
+        <div class="submit-container">
+          <button class="submit-btn-large" onclick="requestSubmit()">📥 تسليم الامتحان وعرض النتيجة</button>
+        </div>
+      `;
+
+      qContainer.innerHTML = htmlStr;
     }
 
-    // --- Helpers ---
-    function countUp(elementId, target, duration) {
-      const el = document.getElementById(elementId);
-      let start = 0;
-      const increment = target / (duration / 16); // 60fps
+    function selectOption(qIndex, optIndex) {
+      userAnswers[qIndex] = optIndex;
       
-      function update() {
-        start += increment;
-        if (start >= target) {
-          el.innerText = target;
-        } else {
-          el.innerText = Math.floor(start);
-          requestAnimationFrame(update);
+      for(let i=0; i<4; i++) {
+        const el = document.getElementById(`opt_${qIndex}_${i}`);
+        if(el) el.classList.remove('selected');
+      }
+      const selectedEl = document.getElementById(`opt_${qIndex}_${optIndex}`);
+      if(selectedEl) selectedEl.classList.add('selected');
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answered = userAnswers.filter(a => a !== null).length;
+      const total = qData.length;
+      answeredCount.innerText = `مجاب: ${answered} / ${total}`;
+      progressBar.style.width = `${(answered / total) * 100}%`;
+    }
+
+    function requestSubmit() {
+      const answered = userAnswers.filter(a => a !== null).length;
+      const total = qData.length;
+      document.getElementById('modalStats').innerText = `مجاب: ${answered} | متبقي: ${total - answered}`;
+      confirmModal.classList.add('active');
+    }
+
+    function closeModal() {
+      confirmModal.classList.remove('active');
+    }
+
+    function calculateScore(questions, answers, correctAnswers) {
+      let totalAnswered = 0;
+      let totalCorrect = 0;
+      
+      for (let i = 0; i < questions.length; i++) {
+        const answer = answers[i];
+        const isEmpty = (answer === null || answer === undefined || answer === '');
+        
+        if (!isEmpty) {
+          totalAnswered++;
+          if (String(answer).trim().toUpperCase() === String(correctAnswers[i]).trim().toUpperCase()) {
+            totalCorrect++;
+          }
         }
       }
-      if(target > 0) update();
-      else el.innerText = "0";
+      
+      return {
+        answered: totalAnswered,
+        correct: totalCorrect,
+        wrong: totalAnswered - totalCorrect,
+        skipped: questions.length - totalAnswered,
+        percentage: totalAnswered > 0 ? Math.round((totalCorrect / questions.length) * 100) : 0,
+        scoreLabel: totalCorrect + " / " + questions.length
+      };
     }
 
-    function triggerConfetti() {
-      const canvas = document.getElementById('confetti-canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    function submitExam() {
+      closeModal();
       
-      const pieces = [];
-      const colors = ['#4f8ef7', '#a78bfa', '#fbbf24']; // accent, accent-2, gold
+      const totalQs = qData.length;
+      const correctArr = qData.map(q => q[5]); 
       
-      for(let i=0; i<100; i++) {
-        pieces.push({
-          x: canvas.width / 2,
-          y: canvas.height / 2 + 100,
-          vx: (Math.random() - 0.5) * 20,
-          vy: (Math.random() - 1) * 20 - 5,
-          size: Math.random() * 8 + 4,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          rot: Math.random() * 360,
-          rotSpeed: (Math.random() - 0.5) * 10
-        });
-      }
+      const res = calculateScore(qData, userAnswers, correctArr);
+      const perc = Math.round((res.correct / totalQs) * 100);
 
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let active = false;
-        pieces.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += 0.5; // gravity
-          p.rot += p.rotSpeed;
-          if(p.y < canvas.height) active = true;
-          
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rot * Math.PI / 180);
-          ctx.fillStyle = p.color;
-          ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
-          ctx.restore();
-        });
-        if(active) requestAnimationFrame(animate);
-      }
-      animate();
+      document.getElementById('scorePerc').innerText = `${perc}%`;
+      document.getElementById('scoreFraction').innerText = `${res.correct} / ${totalQs}`;
+      document.getElementById('statAnswered').innerText = res.answered;
+      document.getElementById('statCorrect').innerText = res.correct;
+      document.getElementById('statWrong').innerText = res.wrong;
+      document.getElementById('statSkipped').innerText = res.skipped;
+
+      let badge = "📚 ابدأ من الأساسيات";
+      let circleColor = "var(--warning)";
+      if(perc >= 90) { badge = "🏆 ممتاز! خبير Office"; circleColor = "var(--success)"; }
+      else if(perc >= 75) { badge = "🥇 جيد جدًا! محترف"; circleColor = "var(--success)"; }
+      else if(perc >= 60) { badge = "🥈 جيد، استمر في التطوير"; circleColor = "var(--gold)"; }
+      else if(perc >= 40) { badge = "💪 يحتاج مراجعة أكثر"; circleColor = "var(--gold)"; }
+      
+      document.getElementById('badgeText').innerText = badge;
+      
+      const circle = document.getElementById('scoreProgressCircle');
+      circle.style.stroke = circleColor;
+      const offset = 565.48 - (perc / 100) * 565.48;
+
+      renderReviewSection();
+
+      // طريقة آمنة بنسبة 100% للانتقال لصفحة النتيجة
+      s2.style.display = 'none';
+      s2.classList.remove('active');
+      
+      s3.style.display = 'block';
+      s3.classList.add('active');
+      window.scrollTo(0, 0);
+
+      setTimeout(() => {
+        circle.style.strokeDashoffset = offset;
+      }, 100);
+    }
+
+    function renderReviewSection() {
+      const letters = ['A', 'B', 'C', 'D'];
+      const rList = document.getElementById('reviewList');
+      rList.innerHTML = '';
+
+      qData.forEach((q, i) => {
+        const correctIdx = q[5];
+        const userIdx = userAnswers[i];
+        
+        let status = 'skipped';
+        let statusText = '⬜ لم تُجب';
+        let userText = 'No Answer';
+
+        if(userIdx !== null) {
+          userText = letters[userIdx] + ' - ' + q[userIdx + 1];
+          if(userIdx === correctIdx) {
+            status = 'correct';
+            statusText = '✅ صحيحة';
+          } else {
+            status = 'wrong';
+            statusText = '❌ خاطئة';
+          }
+        }
+
+        const correctText = letters[correctIdx] + ' - ' + q[correctIdx + 1];
+
+        const card = `
+          <div class="review-card" data-status="${status}">
+            <div class="review-header">
+              <span class="q-num">Q${String(i + 1).padStart(3, '0')}</span>
+              <span class="status-badge">${statusText}</span>
+            </div>
+            <div class="review-question" style="direction: ltr;">${q[0]}</div>
+            <div class="review-answers" style="direction: ltr;">
+              <div class="correct-answer">🎯 Correct Answer: <strong>${correctText}</strong></div>
+              <div class="user-answer">👤 Your Answer: <strong>${userText}</strong></div>
+            </div>
+          </div>
+        `;
+        rList.innerHTML += card;
+      });
     }
   </script>
 </body>
